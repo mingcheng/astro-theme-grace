@@ -56,9 +56,15 @@ featured: false # 可选，为 true 时出现在首页“编辑推荐”
 正文段落……
 
 > 引用会以绛红色的大字呈现。
+
+行内公式 $E = mc^2$ 与块级公式：
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
 ```
 
-frontmatter 会在 `deno task check` / `deno task build` 时按 `src/content.config.ts` 的 schema 校验。二级标题会自动编号。
+frontmatter 会在 `deno task check` / `deno task build` 时按 `src/content.config.ts` 的 schema 校验。二级标题会自动编号。`$...$` / `$$...$$` 由 [remark-math](https://github.com/remarkjs/remark-math) 与 [KaTeX](https://katex.org/) 渲染，配置见 `astro.config.mjs`。
 
 ## 配置
 
@@ -73,7 +79,7 @@ frontmatter 会在 `deno task check` / `deno task build` 时按 `src/content.con
 
 `/elements` 页面按类别展示全部可复用组件，均为零 JavaScript 的静态实现：
 
-- 正文元素：行内强调、高亮、键盘按键、列表、分隔线、引用（`Quote`）与描述列表（`DescriptionList`）
+- 正文元素：行内强调、高亮、键盘按键、列表、分隔线、引用（`Quote`）、描述列表（`DescriptionList`）与 KaTeX 数学公式（行内 / 块级）
 - 图片：图片头像（`Avatar`，含作者署名与叠放头像组）、正文插图（`Figure`，支持图注、比例裁切、收窄居中与图文环绕）以及 Markdown 插图样式
 - 基础元素：标签（`Pill`）、按钮（`.button` / `.button.quiet`）、头像（`Avatar`）、提示气泡（`Tooltip`）、下拉菜单（`Dropdown`）
 - 表单控件：`TextField`（单行 / 多行）、`SelectField`、`RadioGroup`、`Choice`（复选框 / 单选 / 开关）与通用 `Field` 包装

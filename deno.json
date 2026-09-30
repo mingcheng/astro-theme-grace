@@ -3,9 +3,14 @@
   "imports": {
     "@/": "./src/",
     "@astrojs/check": "npm:@astrojs/check@^0.9.10",
+    "@astrojs/markdown-remark": "npm:@astrojs/markdown-remark@^7.3.1",
     "@astrojs/sitemap": "npm:@astrojs/sitemap@^3.7.4",
     "astro": "npm:astro@^7.3.5",
     "astro/": "npm:astro@^7.3.5/",
+    "katex": "npm:katex@^0.16.11",
+    "katex/": "npm:katex@^0.16.11/",
+    "rehype-katex": "npm:rehype-katex@^7.0.1",
+    "remark-math": "npm:remark-math@^6.0.0",
     "typescript": "npm:typescript@^5.9.3",
     "vitest": "npm:vitest@^3.2.7",
     "vitest/": "npm:vitest@^3.2.7/"

@@ -56,10 +56,17 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { formatChineseDate, toISODate } from '@/lib/format';
 import { getNotes } from '@/lib/notes';
 import { withBase } from '@/lib/urls';
+import katex from 'katex';
 
 const notes = await getNotes();
 const iconNames = Object.keys(iconLabels) as IconName[];
 const bylineDate = new Date('2026-09-12T00:00:00+08:00');
+// 与 Markdown 中 $...$ / $$...$$ 走同一套 KaTeX 渲染，展示行内与块级公式的实际效果。
+const inlineFormula = katex.renderToString('E = mc^2', { throwOnError: false });
+const blockFormula = katex.renderToString('x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}', {
+  throwOnError: false,
+  displayMode: true,
+});
 ---
 
 <BaseLayout title="元素规范" description="站点的字体、颜色与界面元素展示。">
@@ -142,6 +149,11 @@ const bylineDate = new Date('2026-09-12T00:00:00+08:00');
           修订内容以<del>删除线</del>表示，缩写如 <abbr title="内容分发网络">CDN</abbr> 可悬停查看全称，
           上下标如 H<sub>2</sub>O 与 10<sup>3</sup>。
         </p>
+        <p>
+          Markdown 中的 <code>$...$</code> 与 <code>$$...$$</code> 会经 KaTeX 渲染为数学公式，
+          例如质能方程 <Fragment set:html={inlineFormula} /> 可直接嵌入行内：
+        </p>
+        <Fragment set:html={blockFormula} />
         <ul>
           <li>无序列表适合并列的要点。</li>
           <li>列表符号使用强调色，保持克制的视觉提示。</li>

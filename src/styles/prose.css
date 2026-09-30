@@ -127,6 +127,19 @@
 .prose tbody tr:hover {
   background: var(--surface);
 }
+/* 数学公式：$...$ 行内公式与 $$...$$ 块级公式经 KaTeX 渲染；
+   块级公式允许横向滚动，避免长公式在窄屏下撑破正文容器 */
+.prose .katex-display {
+  margin: 2rem 0;
+  padding: 0.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.prose .katex {
+  font-size: 1.05em;
+}
+
 /* 引用：Markdown 的 > 引用与 Quote 组件共用 */
 .prose blockquote,
 .quote>blockquote {

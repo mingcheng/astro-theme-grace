@@ -32,23 +32,24 @@ src/
 ├── components/           # 按用途分组：layout / ui / forms / feedback / navigation / content / data / styleguide
 ├── data/                 # 站点配置（site.ts）、仪表盘示例数据、图标与元素规范示例数据
 ├── layouts/BaseLayout.astro
-├── lib/                  # 与框架无关的工具函数（日期、分页、状态、文章查询），附单元测试
+├── lib/                  # 与框架无关的工具函数（日期、分页、状态、文章查询、代码块标题栏），附单元测试
 ├── pages/                # 路由：/、/notes、/notes/[slug]、/dashboard、/elements
-└── styles/               # tokens / base / utilities / controls / prose，由 global.css 统一引入
+├── scripts/              # 仅有的客户端脚本：代码块复制按钮（copy-code.ts）
+└── styles/               # tokens / base / utilities / controls / prose / code，由 global.css 统一引入
 ```
 
 ## 写一篇文章
 
-在 `src/content/notes/` 新建 `kebab-case` 命名的 Markdown 文件，例如 `my-first-note.md`，访问地址即 `/notes/my-first-note`：
+在 `src/content/notes/` 新建 `kebab-case` 命名的 Markdown 文件，例如 `my-first-note.md`，访问地址即 `/notes/my-first-note`（也可以用 frontmatter 的 `slug` 指定地址，但不能是纯数字，以免与 `/notes/2` 等分页地址冲突）：
 
-```markdown
+````markdown
 ---
 title: 文章标题
-excerpt: 一句不少于十个字的摘要，用于列表与页面描述。
-category: 设计 # 思考 | 设计 | 生活
+excerpt: 一句不少于十个字的摘要，用于列表与页面描述。 # 可选
+category: 设计 # 思考 | 设计 | 生活 | 未分类
 publishedAt: 2026-10-01
-readingMinutes: 5
 featured: false # 可选，为 true 时出现在首页“编辑推荐”
+draft: false # 可选，为 true 时只在 deno task dev 中显示，不会被构建发布
 ---
 
 ## 第一节小标题
@@ -62,9 +63,15 @@ featured: false # 可选，为 true 时出现在首页“编辑推荐”
 $$
 x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
 $$
+
+```ts title="src/hello.ts"
+console.log('代码块会被高亮，并带有复制按钮');
 ```
+````
 
 frontmatter 会在 `deno task check` / `deno task build` 时按 `src/content.config.ts` 的 schema 校验。二级标题会自动编号。`$...$` / `$$...$$` 由 [remark-math](https://github.com/remarkjs/remark-math) 与 [KaTeX](https://katex.org/) 渲染，配置见 `astro.config.mjs`。
+
+围栏代码块由 Astro 内置的 [Shiki](https://shiki.style/) 在构建时高亮（`css-variables` 主题，配色为 `tokens.css` 中的 `--astro-code-*` 变量），`src/lib/code-block.ts` 中的转换器为其加上标题栏：默认显示语言，围栏上写 `title="文件名"` 时显示文件名。标题栏右侧的「复制」按钮由约 1 KB 的 `src/scripts/copy-code.ts` 驱动，仅在浏览器支持剪贴板 API 时显示，禁用脚本时代码块照常可读。
 
 ## 配置
 
@@ -77,9 +84,9 @@ frontmatter 会在 `deno task check` / `deno task build` 时按 `src/content.con
 
 仪表盘组件包括指标卡、状态标签、进度条、环形图、趋势图和响应式数据表格；内容组件包括标题、代码块与多级目录。
 
-`/elements` 页面按类别展示全部可复用组件，均为零 JavaScript 的静态实现：
+`/elements` 页面按类别展示全部可复用组件，除代码块复制按钮外均为零 JavaScript 的静态实现：
 
-- 正文元素：行内强调、高亮、键盘按键、列表、分隔线、引用（`Quote`）、描述列表（`DescriptionList`）与 KaTeX 数学公式（行内 / 块级）
+- 正文元素：行内强调、高亮、键盘按键、列表、分隔线、引用（`Quote`）、描述列表（`DescriptionList`）、KaTeX 数学公式（行内 / 块级）与带复制按钮的高亮代码块
 - 图片：图片头像（`Avatar`，含作者署名与叠放头像组）、正文插图（`Figure`，支持图注、比例裁切、收窄居中与图文环绕）以及 Markdown 插图样式
 - 基础元素：标签（`Pill`）、按钮（`.button` / `.button.quiet`）、头像（`Avatar`）、提示气泡（`Tooltip`）、下拉菜单（`Dropdown`）
 - 表单控件：`TextField`（单行 / 多行）、`SelectField`、`RadioGroup`、`Choice`（复选框 / 单选 / 开关）与通用 `Field` 包装

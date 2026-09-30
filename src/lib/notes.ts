@@ -3,8 +3,10 @@ import { withBase } from '@/lib/urls';
 
 export type Note = CollectionEntry<'notes'>;
 
-/** 全部文章，按发布日期从新到旧排列。 */
+/** 全部文章，按发布日期从新到旧排列；草稿只在开发环境中出现。 */
 export const getNotes = async () =>
-  (await getCollection('notes')).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+  (await getCollection('notes', ({ data }) => import.meta.env.DEV || !data.draft)).sort(
+    (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+  );
 
 export const getNoteUrl = (note: Note) => withBase(`/notes/${note.id}`);

@@ -8,6 +8,7 @@
     "npm:katex@~0.16.11": "0.16.47",
     "npm:rehype-katex@^7.0.1": "7.0.1",
     "npm:remark-math@6": "6.0.0",
+    "npm:shiki@^4.4.3": "4.4.3",
     "npm:typescript@^5.9.3": "5.9.3",
     "npm:vitest@^3.2.7": "3.2.7"
   },
@@ -3702,6 +3703,7 @@
       "npm:katex@~0.16.11",
       "npm:rehype-katex@^7.0.1",
       "npm:remark-math@6",
+      "npm:shiki@^4.4.3",
       "npm:typescript@^5.9.3",
       "npm:vitest@^3.2.7"
     ]

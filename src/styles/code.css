@@ -1,0 +1,80 @@
+/* Markdown 代码块：Shiki 渲染 + codeFrameTransformer 生成的 figure.code-frame（标题栏 + 复制按钮） */
+.code-frame {
+  margin: 2rem 0;
+  color: var(--paper);
+  border: 1px solid var(--ink-line);
+  background: var(--ink);
+}
+
+.code-frame-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.5rem 0.35rem 1.25rem;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--ink-line);
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+}
+
+.code-frame-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-frame-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.code-copy {
+  padding: 0.25rem 0.65rem;
+  color: var(--ink-muted);
+  border: 1px solid var(--ink-line);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.code-copy[hidden] {
+  display: none;
+}
+
+.code-copy:hover,
+.code-copy:focus-visible {
+  color: var(--paper);
+  border-color: var(--ink-muted);
+}
+
+.code-copy[data-state='copied'] {
+  color: var(--accent-light);
+  border-color: var(--accent-light);
+}
+
+.code-frame>pre,
+.prose>pre {
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+  max-width: 100%;
+  overflow-x: auto;
+  color: var(--paper);
+  background: var(--ink);
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+  line-height: 1.75;
+  tab-size: 2;
+}
+
+/* 未经 Shiki 处理的原始 <pre>（例如 Markdown 中直接写的 HTML）也保持墨色主题 */
+.prose>pre {
+  margin: 2rem 0;
+  border: 1px solid var(--ink-line);
+}

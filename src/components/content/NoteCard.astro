@@ -24,7 +24,7 @@ const url = getNoteUrl(note);
       >
     </div>
     <h2><a href={url}>{title}</a></h2>
-    <p>{excerpt}</p>
+    {excerpt && <p>{excerpt}</p>}
   </div>
   <a class="arrow" href={url} aria-label={`阅读《${title}》`}>↗</a>
 </article>

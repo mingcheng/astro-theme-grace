@@ -14,9 +14,11 @@ interface Props {
 
 const { label, for: htmlFor, hint, hintId, error, errorId, required = false, as = 'div' } = Astro.props;
 const Tag = as;
+// fieldset 内的单选 / 复选框无法各自引用说明文字，改由 fieldset 统一关联
+const describedBy = as === 'fieldset' ? [hint && hintId, error && errorId].filter(Boolean).join(' ') || undefined : undefined;
 ---
 
-<Tag class="field">
+<Tag class="field" aria-describedby={describedBy}>
   {as === 'fieldset' ? (
     <legend class="field-label">{label}{required && <span class="required" aria-hidden="true">*</span>}</legend>
   ) : (

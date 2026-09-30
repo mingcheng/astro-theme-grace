@@ -53,9 +53,11 @@ import {
   timelineItems,
 } from '@/data/styleguide';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { codeFrameTransformer } from '@/lib/code-block';
 import { formatChineseDate, toISODate } from '@/lib/format';
 import { getNotes } from '@/lib/notes';
 import { withBase } from '@/lib/urls';
+import { Code } from 'astro:components';
 import katex from 'katex';
 
 const notes = await getNotes();
@@ -154,6 +156,11 @@ const blockFormula = katex.renderToString('x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}
           例如质能方程 <Fragment set:html={inlineFormula} /> 可直接嵌入行内：
         </p>
         <Fragment set:html={blockFormula} />
+        <p>
+          围栏代码块由 Shiki 在构建时高亮，标题栏显示语言，可用 <code>title="文件名"</code> 标注来源，右侧按钮一键复制：
+        </p>
+        <Code code={exampleCode} lang="ts" meta='title="src/monitor.ts"' theme="css-variables" transformers={[codeFrameTransformer]} />
+        <Code code="deno task build" lang="bash" theme="css-variables" transformers={[codeFrameTransformer]} />
         <ul>
           <li>无序列表适合并列的要点。</li>
           <li>列表符号使用强调色，保持克制的视觉提示。</li>
@@ -446,6 +453,10 @@ const blockFormula = katex.renderToString('x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}
     </StyleguideSection>
   </div>
 </BaseLayout>
+
+<script>
+  import '@/scripts/copy-code';
+</script>
 
 <style>
   .intro {

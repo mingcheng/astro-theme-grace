@@ -11,6 +11,7 @@
     "katex/": "npm:katex@^0.16.11/",
     "rehype-katex": "npm:rehype-katex@^7.0.1",
     "remark-math": "npm:remark-math@^6.0.0",
+    "shiki": "npm:shiki@^4.4.3",
     "typescript": "npm:typescript@^5.9.3",
     "vitest": "npm:vitest@^3.2.7",
     "vitest/": "npm:vitest@^3.2.7/"

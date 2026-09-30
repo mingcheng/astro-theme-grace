@@ -1,4 +1,6 @@
 ---
+import { createId } from '@/lib/ids';
+
 interface Props {
   values: number[];
   label: string;
@@ -20,19 +22,21 @@ const points = values
   .join(' ');
 const areaPoints = `0,${height} ${points} ${width},${height}`;
 const latest = values.at(-1) ?? 0;
+// 同一页面可能出现多个折线图，渐变的 id 必须唯一
+const gradientId = createId('spark-fill');
 ---
 
 <figure class="sparkline">
   <figcaption><span>{label}</span><strong>{latest}{unit}</strong></figcaption>
   <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${label}，当前 ${latest}${unit}`}>
     <defs>
-      <linearGradient id="spark-fill" x1="0" x2="0" y1="0" y2="1">
+      <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
         <stop offset="0%" style="stop-color: var(--accent); stop-opacity: 0.22" />
         <stop offset="100%" style="stop-color: var(--accent); stop-opacity: 0" />
       </linearGradient>
     </defs>
     <path class="grid" d={`M0 ${height / 2}H${width} M0 ${height - 1}H${width}`} />
-    <polygon points={areaPoints} fill="url(#spark-fill)" />
+    <polygon points={areaPoints} fill={`url(#${gradientId})`} />
     <polyline points={points} />
   </svg>
 </figure>

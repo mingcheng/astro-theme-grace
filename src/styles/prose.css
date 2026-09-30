@@ -7,8 +7,6 @@
 .prose h2 {
   clear: both;
   margin: 5rem 0 2rem;
-  font-size: var(--h2);
-  font-weight: 500;
   letter-spacing: -0.04em;
   line-height: 1.3;
 }
@@ -32,21 +30,7 @@
   font-style: normal;
 }
 
-/* Markdown 代码块（```lang）：Shiki 通过内联样式设置背景与文字颜色，用 !important 覆盖为墨色主题；
-   语法高亮的具体颜色沿用 Shiki 主题内联样式，不做改动 */
-.prose>pre {
-  margin: 2rem 0;
-  padding: 1.1rem 1.25rem;
-  max-width: 100%;
-  overflow-x: auto;
-  border: 1px solid var(--ink-line);
-  background-color: var(--ink) !important;
-  color: var(--paper) !important;
-  font-family: var(--mono);
-  font-size: var(--text-sm);
-  line-height: 1.75;
-  tab-size: 2;
-}
+/* Markdown 代码块的样式见 code.css */
 
 /* 清除 Figure 浮动插图，避免溢出正文容器 */
 .prose::after {
@@ -58,7 +42,6 @@
 /* Markdown 插图：![说明](地址) 会渲染为只含图片的段落，与 Figure 组件保持一致的边框 */
 .prose>p:has(> img:only-child) {
   margin: 2.5rem 0;
-  text-indent: 0;
 }
 
 .prose p>img {
@@ -127,6 +110,7 @@
 .prose tbody tr:hover {
   background: var(--surface);
 }
+
 /* 数学公式：$...$ 行内公式与 $$...$$ 块级公式经 KaTeX 渲染；
    块级公式允许横向滚动，避免长公式在窄屏下撑破正文容器 */
 .prose .katex-display {
@@ -144,10 +128,10 @@
 .prose blockquote,
 .quote>blockquote {
   margin: 1rem 0 1rem 1rem;
-  padding: .5rem 0 .5rem 1rem;
+  padding: 0.5rem 0 0.5rem 1rem;
   color: var(--accent-dark);
   border-left: 3px solid var(--accent);
-    font-size: var(--text-lg);
+  font-size: var(--text-lg);
   line-height: 1.7;
 }
 
@@ -171,5 +155,5 @@
   padding-left: 2rem;
   color: var(--muted);
   font-family: var(--sans);
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
 }

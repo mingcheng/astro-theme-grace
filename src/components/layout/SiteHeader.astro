@@ -12,12 +12,7 @@ const isActive = (href: string) => {
 <header class="header">
   <div class="container header-inner">
     <a class="mark" href={withBase("/")} aria-label={`${SITE.name}的首页`}>
-      <img
-        src={`${withBase("/favicon.svg")}`}
-        alt="{SITE.name}"
-        width="32"
-        height="32"
-      />
+      <img src={withBase("/favicon.svg")} alt="" width="32" height="32" />
       <span>{SITE.name}</span>
     </a>
     <nav aria-label="主要导航">
@@ -60,14 +55,6 @@ const isActive = (href: string) => {
     font-family: var(--title);
     font-weight: 600;
     text-decoration: none;
-  }
-
-  .mark svg {
-    width: 26px;
-    color: var(--accent);
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.4;
   }
 
   nav ul {

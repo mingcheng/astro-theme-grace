@@ -9,6 +9,8 @@ describe('format helpers', () => {
 
   it('produces ISO dates for datetime attributes', () => {
     expect(toISODate(new Date('2026-09-12'))).toBe('2026-09-12');
+    // 与 formatChineseDate 保持同一天（UTC 20:00 已是北京时间次日）
+    expect(toISODate(new Date('2026-09-11T20:00:00Z'))).toBe('2026-09-12');
   });
 
   it('rounds percentages', () => {

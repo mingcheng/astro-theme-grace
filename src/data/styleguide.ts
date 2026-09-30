@@ -33,10 +33,10 @@ export const colorTokens = [
 ];
 
 export const headingScale = [
-  { size: 'display', note: 'display · H1 默认 · 36–56px', title: '清醒地创造' },
-  { size: 'section', note: 'section · H2 默认 · 30–44px', title: '好的设计从理解开始' },
-  { size: 'title', note: 'title · H3 默认 · 26–34px', title: '为中文阅读留出呼吸' },
-  { size: 'subtitle', note: 'subtitle · H4 默认 · 22–26px', title: '节奏、行长与字重' },
+  { size: 'display', note: 'display · H1 默认 · 40px', title: '清醒地创造' },
+  { size: 'section', note: 'section · H2 默认 · 32px', title: '好的设计从理解开始' },
+  { size: 'title', note: 'title · H3 默认 · 28px', title: '为中文阅读留出呼吸' },
+  { size: 'subtitle', note: 'subtitle · H4 默认 · 24px', title: '节奏、行长与字重' },
   { size: 'label', note: 'label · H5–H6 默认 · 16px', title: '附注与小节标题' },
 ] as const;
 

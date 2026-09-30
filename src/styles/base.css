@@ -29,19 +29,12 @@ h3,
 h4,
 h5,
 h6 {
+  color: var(--accent);
+  font-family: var(--title);
   font-weight: 500;
   line-height: 1.3;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--accent);
-  font-family: var(--title);
-}
 h1 { font-size: var(--h1); }
 h2 { font-size: var(--h2); }
 h3 { font-size: var(--h3); }

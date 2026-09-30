@@ -14,7 +14,7 @@ const featured = notes.find((note) => note.data.featured) ?? notes[0];
 <BaseLayout description={profile.bio}>
   <section class="hero container">
     <div class="hero-copy">
-      <p class="eyebrow">独立设计师 · 写作者 · 上海</p>
+      <p class="eyebrow">{profile.role} · {profile.location}</p>
       <h1 class="display">设计是<br /><em>温柔的</em>秩序。</h1>
     </div>
     <div class="hero-aside">
@@ -76,7 +76,7 @@ const featured = notes.find((note) => note.data.featured) ?? notes[0];
       <div class="feature-copy">
         <Pill label="编辑推荐" tone="accent" />
         <h2>{featured.data.title}</h2>
-        <p>{featured.data.excerpt}</p>
+        {featured.data.excerpt && <p>{featured.data.excerpt}</p>}
         <a class="button" href={getNoteUrl(featured)}>开始阅读 <span>→</span></a
         >
       </div>

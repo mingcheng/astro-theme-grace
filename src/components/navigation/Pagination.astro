@@ -39,13 +39,9 @@ const items = getPaginationItems(currentPage, totalPages);
 
   <ol>
     {
-      items.map((item, index) =>
+      items.map((item) =>
         item === "ellipsis" ? (
-          <li
-            class="ellipsis"
-            aria-hidden="true"
-            data-key={`ellipsis-${index}`}
-          >
+          <li class="ellipsis" aria-hidden="true">
             ···
           </li>
         ) : (

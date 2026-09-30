@@ -84,13 +84,7 @@ const hasActions = Astro.slots.has("actions");
     text-wrap: balance;
   }
 
-  .display {
-    color: var(--accent);
-    font-size: var(--h1);
-    letter-spacing: -0.065em;
-    line-height: 1.05;
-    font-family: var(--title);
-  }
+  /* size="display" 直接复用 utilities.css 中的全局 .display */
 
   .section {
     font-size: var(--h2);

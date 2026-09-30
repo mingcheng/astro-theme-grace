@@ -30,7 +30,7 @@ import { withBase } from '@/lib/urls';
 
   .footer-title {
     margin: 0;
-    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-size: var(--h3);
   }
 
   .muted {
@@ -42,7 +42,7 @@ import { withBase } from '@/lib/urls';
     align-content: start;
     gap: 0.55rem;
     font-family: var(--sans);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
   }
 
   .copyright {
@@ -52,7 +52,7 @@ import { withBase } from '@/lib/urls';
     color: var(--muted);
     border-top: 1px solid var(--line);
     font-family: var(--sans);
-    font-size: 0.72rem;
+    font-size: var(--text-xs);
   }
 
   @media (max-width: 640px) {

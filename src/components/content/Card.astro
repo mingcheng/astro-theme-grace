@@ -44,7 +44,7 @@ const hasFooter = Astro.slots.has('footer');
 
   h3 {
     margin: 0;
-    font-size: 1.35rem;
+    font-size: var(--h5);
     font-weight: 500;
     line-height: 1.45;
   }
@@ -65,7 +65,7 @@ const hasFooter = Astro.slots.has('footer');
   .description {
     margin: 0;
     color: var(--muted);
-    font-size: 0.92rem;
+    font-size: var(--text-sm);
   }
 
   footer {
@@ -80,6 +80,6 @@ const hasFooter = Astro.slots.has('footer');
     color: var(--muted);
     border-top: 1px solid var(--line);
     font-family: var(--sans);
-    font-size: 0.7rem;
+    font-size: var(--text-xs);
   }
 </style>

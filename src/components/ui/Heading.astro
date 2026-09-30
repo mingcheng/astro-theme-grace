@@ -71,31 +71,31 @@ const hasActions = Astro.slots.has('actions');
   }
 
   .display {
-    font-size: clamp(3rem, 8vw, 7.5rem);
+    font-size: var(--h1);
     letter-spacing: -0.065em;
     line-height: 1.05;
   }
 
   .section {
-    font-size: clamp(2rem, 4vw, 3.6rem);
+    font-size: var(--h2);
     letter-spacing: -0.045em;
     line-height: 1.25;
   }
 
   .title {
-    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    font-size: var(--h3);
     letter-spacing: -0.03em;
     line-height: 1.35;
   }
 
   .subtitle {
-    font-size: 1.35rem;
+    font-size: var(--h4);
     letter-spacing: -0.01em;
     line-height: 1.5;
   }
 
   .label {
-    font-size: 1rem;
+    font-size: var(--h6);
     line-height: 1.6;
   }
 
@@ -109,7 +109,7 @@ const hasActions = Astro.slots.has('actions');
   .actions {
     color: var(--muted);
     font-family: var(--sans);
-    font-size: 0.7rem;
+    font-size: var(--text-xs);
   }
 
   @media (max-width: 640px) {

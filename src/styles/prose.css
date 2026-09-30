@@ -1,13 +1,13 @@
 /* 长文排版：用于 Markdown 渲染的文章正文，也用于元素规范中的正文示例 */
 .prose h2 {
   margin: 5rem 0 2rem;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: var(--h2);
   font-weight: 500;
   letter-spacing: -0.04em;
   line-height: 1.3;
 }
 
-.prose > :first-child {
+.prose> :first-child {
   margin-top: 0;
 }
 
@@ -25,7 +25,7 @@
   padding-left: 1.4em;
 }
 
-.prose li + li {
+.prose li+li {
   margin-top: 0.45rem;
 }
 
@@ -35,7 +35,7 @@
   font-size: 0.85em;
 }
 
-.prose :not(pre) > code {
+.prose :not(pre)>code {
   padding: 0.1em 0.35em;
   color: var(--accent-dark);
   background: var(--paper-deep);
@@ -45,12 +45,12 @@
 
 /* 引用：Markdown 的 > 引用与 Quote 组件共用 */
 .prose blockquote,
-.quote > blockquote {
-  margin: 3.5rem 0;
-  padding: 1.8rem 0 1.8rem 2rem;
+.quote>blockquote {
+  margin: 1rem 0 1rem 1rem;
+  padding: .5rem 0 .5rem 1rem;
   color: var(--accent-dark);
-  border-left: 2px solid var(--accent);
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  border-left: 3px solid var(--accent);
+    font-size: var(--text-lg);
   line-height: 1.7;
 }
 
@@ -65,11 +65,11 @@
   margin: 3.5rem 0;
 }
 
-.quote > blockquote {
+.quote>blockquote {
   margin: 0;
 }
 
-.quote > figcaption {
+.quote>figcaption {
   margin-top: 1rem;
   padding-left: 2rem;
   color: var(--muted);

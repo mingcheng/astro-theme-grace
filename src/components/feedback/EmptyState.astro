@@ -45,14 +45,14 @@ const hasActions = Astro.slots.has('actions');
   }
 
   .empty-title {
-    font-size: 1.15rem;
+    font-size: var(--text-lg);
     font-weight: 500;
   }
 
   .empty-description {
     max-width: 26rem;
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
   }
 
   .empty-actions {

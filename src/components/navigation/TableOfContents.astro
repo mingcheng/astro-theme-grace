@@ -39,7 +39,7 @@ const { items, title = '本页目录' } = Astro.props;
     margin: 0 0 1rem;
     color: var(--muted);
     font-family: var(--sans);
-    font-size: 0.65rem;
+    font-size: var(--text-xs);
   }
 
   ol {
@@ -55,14 +55,14 @@ const { items, title = '本页目录' } = Astro.props;
     grid-template-columns: 2rem 1fr;
     gap: 0.5rem;
     align-items: baseline;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     text-decoration: none;
   }
 
   a span {
     color: var(--muted);
     font-family: var(--sans);
-    font-size: 0.6rem;
+    font-size: var(--text-xs);
   }
 
   .nested {

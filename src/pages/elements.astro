@@ -83,11 +83,11 @@ const iconNames = Object.keys(iconLabels) as IconName[];
     <StyleguideSection id="type">
       <div class="type-samples">
         <div>
-          <span class="annotation">展示标题 · 72–120px</span>
+          <span class="annotation">展示标题 · H1 · 36–56px</span>
           <p class="display">清醒地创造</p>
         </div>
         <div>
-          <span class="annotation">章节标题 · 32–58px</span>
+          <span class="annotation">章节标题 · H2 · 30–44px</span>
           <p class="section-title">好的设计从理解开始</p>
         </div>
         <div class="body-sample">
@@ -385,10 +385,6 @@ const iconNames = Object.keys(iconLabels) as IconName[];
     grid-column: 1 / -1;
   }
 
-  .intro .display {
-    font-size: clamp(3.5rem, 8vw, 7rem);
-  }
-
   .intro-aside > p {
     margin: 0 0 1.5rem;
     color: var(--muted);
@@ -401,7 +397,7 @@ const iconNames = Object.keys(iconLabels) as IconName[];
   code {
     color: var(--muted);
     font-family: var(--sans);
-    font-size: 0.68rem;
+    font-size: var(--text-xs);
   }
 
   /* 通用布局：纵向堆叠、两列网格与横向排列 */
@@ -449,7 +445,7 @@ const iconNames = Object.keys(iconLabels) as IconName[];
   }
 
   .swatch strong {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-weight: 500;
   }
 
@@ -539,7 +535,7 @@ const iconNames = Object.keys(iconLabels) as IconName[];
     justify-content: space-between;
     padding: 1.2rem 0;
     border-bottom: 1px solid var(--ink);
-    font-size: 1.2rem;
+    font-size: var(--text-lg);
     text-decoration: none;
   }
 
@@ -576,7 +572,7 @@ const iconNames = Object.keys(iconLabels) as IconName[];
   }
 
   .icon-item span {
-    font-size: 0.78rem;
+    font-size: var(--text-xs);
   }
 
   @media (max-width: 760px) {

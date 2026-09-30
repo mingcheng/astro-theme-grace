@@ -1,5 +1,6 @@
 /* 长文排版：用于 Markdown 渲染的文章正文，也用于元素规范中的正文示例 */
 .prose h2 {
+  clear: both;
   margin: 5rem 0 2rem;
   font-size: var(--h2);
   font-weight: 500;
@@ -22,6 +23,26 @@
 .prose>p {
   text-indent: 2em;
 }
+
+/* 清除 Figure 浮动插图，避免溢出正文容器 */
+.prose::after {
+  display: table;
+  clear: both;
+  content: '';
+}
+
+/* Markdown 插图：![说明](地址) 会渲染为只含图片的段落，与 Figure 组件保持一致的边框 */
+.prose>p:has(> img:only-child) {
+  margin: 2.5rem 0;
+  text-indent: 0;
+}
+
+.prose p>img {
+  height: auto;
+  border: 1px solid var(--line);
+  background: var(--paper-deep);
+}
+
 .prose ul,
 .prose ol {
   margin: 0 0 1.6rem;

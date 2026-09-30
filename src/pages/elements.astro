@@ -3,6 +3,7 @@ import Accordion from '@/components/content/Accordion.astro';
 import Card from '@/components/content/Card.astro';
 import CodeBlock from '@/components/content/CodeBlock.astro';
 import DescriptionList from '@/components/content/DescriptionList.astro';
+import Figure from '@/components/content/Figure.astro';
 import NoteCard from '@/components/content/NoteCard.astro';
 import Quote from '@/components/content/Quote.astro';
 import Timeline from '@/components/content/Timeline.astro';
@@ -37,6 +38,7 @@ import Tooltip from '@/components/ui/Tooltip.astro';
 import { storageSegments, trafficTrend } from '@/data/dashboard';
 import { iconLabels, type IconName } from '@/data/icons';
 import {
+  avatarGroup,
   collaborationOptions,
   colorTokens,
   dropdownItems,
@@ -45,16 +47,19 @@ import {
   headingScale,
   nodeTable,
   regionOptions,
+  sampleImage,
   signupSteps,
   styleguideSections,
   timelineItems,
 } from '@/data/styleguide';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatChineseDate, toISODate } from '@/lib/format';
 import { getNotes } from '@/lib/notes';
 import { withBase } from '@/lib/urls';
 
 const notes = await getNotes();
 const iconNames = Object.keys(iconLabels) as IconName[];
+const bylineDate = new Date('2026-09-12T00:00:00+08:00');
 ---
 
 <BaseLayout title="元素规范" description="站点的字体、颜色与界面元素展示。">
@@ -154,6 +159,64 @@ const iconNames = Object.keys(iconLabels) as IconName[];
             { term: '分类', detail: '设计 · 中文排版' },
           ]}
         />
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="images">
+      <div class="stack">
+        <div class="grid">
+          <Specimen label="头像 · 图片 sm / md / lg / xl">
+            <div class="row">
+              <Avatar name="林知夏" src={sampleImage.src} size="sm" />
+              <Avatar name="林知夏" src={sampleImage.src} />
+              <Avatar name="林知夏" src={sampleImage.src} size="lg" />
+              <Avatar name="林知夏" src={sampleImage.src} size="xl" />
+            </div>
+          </Specimen>
+          <Specimen label="头像 · 无图片时显示姓名缩写">
+            <div class="row">
+              <Avatar name="林知夏" size="sm" />
+              <Avatar name="周予安" />
+              <Avatar name="Ada Lovelace" size="lg" />
+              <Avatar name="陈默" size="xl" />
+            </div>
+          </Specimen>
+          <Specimen label="头像 · 作者署名">
+            <div class="byline">
+              <Avatar name="林知夏" src={sampleImage.src} size="lg" />
+              <div>
+                <strong>林知夏</strong>
+                <span>设计师与写作者 · <time datetime={toISODate(bylineDate)}>{formatChineseDate(bylineDate)}</time></span>
+              </div>
+            </div>
+          </Specimen>
+          <Specimen label="头像 · 叠放头像组">
+            <div class="row">
+              <div class="avatar-group">
+                {avatarGroup.map((person) => <Avatar {...person} />)}
+              </div>
+              <span class="group-note">等 16 位读者收藏了这篇文章</span>
+            </div>
+          </Specimen>
+        </div>
+        <Specimen label="正文插图 · Figure 通栏裁切 / 收窄居中 / 图文环绕">
+          <div class="prose prose-sample">
+            <p>插图与正文共享同一条阅读轴线。通栏插图可以通过 <code>ratio</code> 裁切为统一比例，让版面节奏保持稳定。</p>
+            <Figure {...sampleImage} ratio="16 / 9" caption="图 1 · 通栏插图，按 16:9 裁切并占满正文宽度" />
+            <p>竖幅或方形图片不宜撑满整栏，可以收窄居中，保留原图比例。</p>
+            <Figure {...sampleImage} layout="narrow" caption="图 2 · 收窄居中，保持原图比例" />
+            <Figure {...sampleImage} layout="start" caption="图 3 · 左侧环绕" />
+            <p>较小的配图可以浮动在文字一侧，形成图文环绕。浮动插图的宽度不超过正文的四成，说明文字仍以细线引出，与正文保持距离。</p>
+            <p>在窄屏上，环绕插图会自动恢复为整行显示，避免文字被挤压成过窄的一列。下一个章节标题会清除浮动，不会与插图并排。</p>
+          </div>
+        </Specimen>
+        <Specimen label="Markdown 插图 · ![说明](地址)">
+          <div class="prose prose-sample">
+            <p>在 Markdown 中直接插入图片时，只含图片的段落会取消首行缩进，并获得与 Figure 一致的描边。</p>
+            <p><img src={withBase(sampleImage.src)} alt={sampleImage.alt} width={sampleImage.width} height={sampleImage.height} loading="lazy" decoding="async" /></p>
+            <p>需要图注、裁切或环绕时，请改用 <code>Figure</code> 组件。</p>
+          </div>
+        </Specimen>
       </div>
     </StyleguideSection>
 
@@ -486,6 +549,41 @@ const iconNames = Object.keys(iconLabels) as IconName[];
 
   .prose-sample :global(.quote) {
     margin: 2.5rem 0;
+  }
+
+  /* 图片 */
+  .byline {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .byline strong,
+  .byline span {
+    display: block;
+  }
+
+  .byline strong {
+    font-weight: 500;
+  }
+
+  .byline span,
+  .group-note {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: var(--text-xs);
+  }
+
+  .avatar-group {
+    display: flex;
+  }
+
+  .avatar-group > :global(.avatar) {
+    outline: 2px solid var(--paper);
+  }
+
+  .avatar-group > :global(.avatar + .avatar) {
+    margin-left: -0.6rem;
   }
 
   /* 基础元素与表单 */

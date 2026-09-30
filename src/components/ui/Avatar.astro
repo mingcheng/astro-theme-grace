@@ -4,7 +4,7 @@ import { withBase } from '@/lib/urls';
 interface Props {
   name: string;
   src?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const { name, src, size = 'md' } = Astro.props;
@@ -23,7 +23,7 @@ const getInitials = (value: string) => {
 ---
 
 <span class:list={['avatar', size]} title={name}>
-  {src ? <img src={withBase(src)} alt={name} /> : <span role="img" aria-label={name}>{getInitials(name)}</span>}
+  {src ? <img src={withBase(src)} alt={name} loading="lazy" decoding="async" /> : <span role="img" aria-label={name}>{getInitials(name)}</span>}
 </span>
 
 <style>
@@ -48,4 +48,5 @@ const getInitials = (value: string) => {
   .sm { width: 2rem; height: 2rem; font-size: var(--text-xs); }
   .md { width: 2.75rem; height: 2.75rem; font-size: var(--text-sm); }
   .lg { width: 4rem; height: 4rem; font-size: var(--text-lg); }
+  .xl { width: 6rem; height: 6rem; font-size: var(--h5); }
 </style>

@@ -7,6 +7,7 @@ export const styleguideSections = [
   { id: 'type', label: '中文排版' },
   { id: 'headings', label: '标题元素' },
   { id: 'prose', label: '正文元素' },
+  { id: 'images', label: '图片' },
   { id: 'components', label: '基础元素' },
   { id: 'forms', label: '表单控件' },
   { id: 'feedback', label: '反馈提示' },
@@ -38,6 +39,21 @@ export const headingScale = [
   { size: 'subtitle', note: 'subtitle · H4 默认 · 22–26px', title: '节奏、行长与字重' },
   { size: 'label', note: 'label · H5–H6 默认 · 16px', title: '附注与小节标题' },
 ] as const;
+
+/** 图片示例共用的素材，位于 public/images。 */
+export const sampleImage = {
+  src: '/images/avatar.jpeg',
+  alt: '黑色背景上，白色小怪物双手捧着一杯冒着热气的咖啡',
+  width: 460,
+  height: 460,
+};
+
+export const avatarGroup = [
+  { name: '林知夏', src: sampleImage.src },
+  { name: '周予安' },
+  { name: 'Ada Lovelace' },
+  { name: '陈默', src: sampleImage.src },
+];
 
 export const dropdownItems: { label: string; href: string; icon: IconName }[] = [
   { label: '编辑资料', href: '#components', icon: 'settings' },

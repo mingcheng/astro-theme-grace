@@ -1,0 +1,89 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { withBase } from '@/lib/urls';
+
+interface Props extends HTMLAttributes<'figure'> {
+  src: string;
+  alt: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+  /** 裁切比例，如 `16 / 9`；省略时保持原图比例。 */
+  ratio?: string;
+  /** full 占满正文宽度；narrow 居中收窄；start / end 浮动于文字一侧，窄屏时恢复整行。 */
+  layout?: 'full' | 'narrow' | 'start' | 'end';
+}
+
+const { src, alt, caption, width, height, ratio, layout = 'full', class: className, ...attrs } = Astro.props;
+---
+
+<figure class:list={['figure', layout, className]} {...attrs}>
+  <img
+    src={withBase(src)}
+    alt={alt}
+    width={width}
+    height={height}
+    loading="lazy"
+    decoding="async"
+    class:list={{ cropped: ratio }}
+    style={ratio ? { aspectRatio: ratio } : undefined}
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .figure {
+    margin: 2.5rem 0;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    background: var(--paper-deep);
+  }
+
+  .cropped {
+    object-fit: cover;
+  }
+
+  figcaption {
+    margin-top: 0.75rem;
+    padding-left: 0.75rem;
+    color: var(--muted);
+    border-left: 2px solid var(--accent);
+    font-family: var(--sans);
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  .narrow {
+    width: min(100%, 20rem);
+    margin-inline: auto;
+  }
+
+  .start,
+  .end {
+    width: min(40%, 16rem);
+    margin-block: 0.4rem 1rem;
+  }
+
+  .start {
+    float: left;
+    margin-right: 1.5rem;
+  }
+
+  .end {
+    float: right;
+    margin-left: 1.5rem;
+  }
+
+  @media (max-width: 520px) {
+    .start,
+    .end {
+      float: none;
+      width: auto;
+      margin: 2rem 0;
+    }
+  }
+</style>

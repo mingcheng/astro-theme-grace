@@ -74,6 +74,7 @@ frontmatter 会在 `deno task check` / `deno task build` 时按 `src/content.con
 `/elements` 页面按类别展示全部可复用组件，均为零 JavaScript 的静态实现：
 
 - 正文元素：行内强调、高亮、键盘按键、列表、分隔线、引用（`Quote`）与描述列表（`DescriptionList`）
+- 图片：图片头像（`Avatar`，含作者署名与叠放头像组）、正文插图（`Figure`，支持图注、比例裁切、收窄居中与图文环绕）以及 Markdown 插图样式
 - 基础元素：标签（`Pill`）、按钮（`.button` / `.button.quiet`）、头像（`Avatar`）、提示气泡（`Tooltip`）、下拉菜单（`Dropdown`）
 - 表单控件：`TextField`（单行 / 多行）、`SelectField`、`RadioGroup`、`Choice`（复选框 / 单选 / 开关）与通用 `Field` 包装
 - 反馈提示：`Alert`、`EmptyState`、`Skeleton` 加载占位与基于原生 popover 的 `Dialog`

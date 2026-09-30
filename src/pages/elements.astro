@@ -51,6 +51,7 @@ import {
 } from '@/data/styleguide';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getNotes } from '@/lib/notes';
+import { withBase } from '@/lib/urls';
 
 const notes = await getNotes();
 const iconNames = Object.keys(iconLabels) as IconName[];
@@ -121,7 +122,7 @@ const iconNames = Object.keys(iconLabels) as IconName[];
           </Specimen>
           <Specimen label="附带操作">
             <Heading level={3} size="subtitle" eyebrow="网络 / 过去 12 小时" title="入站流量">
-              <a slot="actions" href="/dashboard">查看全部 →</a>
+              <a slot="actions" href={withBase('/dashboard')}>查看全部 →</a>
             </Heading>
           </Specimen>
         </div>
@@ -239,7 +240,7 @@ const iconNames = Object.keys(iconLabels) as IconName[];
         </Alert>
         <div class="grid">
           <EmptyState title="暂无文章" description="这个分类下还没有内容，换个分类看看，或者稍后再来。">
-            <a slot="actions" class="button quiet" href="/notes">浏览全部文章</a>
+            <a slot="actions" class="button quiet" href={withBase('/notes')}>浏览全部文章</a>
           </EmptyState>
           <Specimen label="加载占位">
             <Skeleton avatar lines={3} />
@@ -334,7 +335,7 @@ const iconNames = Object.keys(iconLabels) as IconName[];
           <ProgressBar label="磁盘使用率" value={93} />
         </Specimen>
         <DataTable caption="节点状态示例" columns={nodeTable.columns} rows={nodeTable.rows} />
-        <a class="dashboard-link" href="/dashboard">查看完整仪表盘示例 <span>→</span></a>
+        <a class="dashboard-link" href={withBase('/dashboard')}>查看完整仪表盘示例 <span>→</span></a>
       </div>
     </StyleguideSection>
 

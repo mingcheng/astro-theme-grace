@@ -1,5 +1,6 @@
 ---
 import { footerLinks, SITE } from '@/data/site';
+import { withBase } from '@/lib/urls';
 ---
 
 <footer>
@@ -9,7 +10,7 @@ import { footerLinks, SITE } from '@/data/site';
       <p class="muted">{SITE.description}</p>
     </div>
     <div class="links">
-      {footerLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      {footerLinks.map((link) => <a href={withBase(link.href)}>{link.label}</a>)}
     </div>
     <p class="copyright">© {new Date().getFullYear()} {SITE.name}</p>
   </div>

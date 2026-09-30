@@ -1,5 +1,6 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
+import { withBase } from '@/lib/urls';
 
 interface Item {
   label: string;
@@ -20,7 +21,7 @@ const lastIndex = items.length - 1;
     {items.map((item, index) => (
       <li>
         {index < lastIndex && item.href ? (
-          <a href={item.href}>{item.label}</a>
+          <a href={withBase(item.href)}>{item.label}</a>
         ) : (
           <span aria-current={index === lastIndex ? 'page' : undefined}>{item.label}</span>
         )}

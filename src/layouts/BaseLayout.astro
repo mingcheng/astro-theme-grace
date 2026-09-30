@@ -2,6 +2,7 @@
 import SiteFooter from '@/components/layout/SiteFooter.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
 import { SITE } from '@/data/site';
+import { withBase } from '@/lib/urls';
 import '@/styles/global.css';
 
 interface Props {
@@ -25,8 +26,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <meta name="theme-color" content={SITE.themeColor} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />

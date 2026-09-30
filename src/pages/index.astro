@@ -4,6 +4,7 @@ import Pill from '@/components/ui/Pill.astro';
 import { profile } from '@/data/site';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getNotes, getNoteUrl } from '@/lib/notes';
+import { withBase } from '@/lib/urls';
 
 const notes = await getNotes();
 const recentNotes = notes.slice(0, 3);
@@ -54,7 +55,7 @@ const featured = notes.find((note) => note.data.featured) ?? notes[0];
         <p class="eyebrow">最近写作 / 02</p>
         <h2 class="section-title">关于创造与生活的笔记</h2>
       </div>
-      <a href="/notes">查看全部文章 →</a>
+      <a href={withBase('/notes')}>查看全部文章 →</a>
     </div>
     {recentNotes.map((note, index) => <NoteCard note={note} index={index} />)}
   </section>

@@ -61,7 +61,7 @@ frontmatter 会在 `npm run check` / `npm run build` 时按 `src/content.config.
 - 站点名称、简介、导航与每页文章数：`src/data/site.ts`
 - 仪表盘示例数据：`src/data/dashboard.ts`
 - 色彩、字体等设计变量：`src/styles/tokens.css`
-- 正式部署前请设置站点域名（用于 canonical 链接与 sitemap）：构建时读取环境变量 `SITE_URL`，未设置时回退到 `astro.config.mjs` 中的 `https://example.com`
+- 构建时通过 `SITE_URL` 设置完整站点地址（包含项目路径），用于 `site`、`base`、canonical 链接与 sitemap；默认 `https://mingcheng.github.io/astro-theme-grace/`。站内链接与静态资源路径会自动加上 `base` 前缀。
 
 文章归档默认每页展示 10 篇，第一页为 `/notes`，后续页面由 Astro 的 `paginate()` 自动生成 `/notes/2` 等静态路由。
 
@@ -83,6 +83,6 @@ frontmatter 会在 `npm run check` / `npm run build` 时按 `src/content.config.
 仓库自带工作流 `.github/workflows/deploy.yml`：推送到 `main` 或手动触发时，会通过 mise 安装 Node 与 pnpm，依次运行测试、`pnpm build`（含 `astro check`），并把 `dist` 发布到 GitHub Pages；Pull Request 只做测试与构建，不发布。
 
 1. 在仓库 Settings → Pages 中，将 Source 设为 **GitHub Actions**。
-2. 可选：在 Settings → Secrets and variables → Actions → Variables 中新增 `SITE_URL`（如 `https://www.example.com`）；未设置时使用 GitHub Pages 的域名。
+2. 默认使用 GitHub Pages 返回的完整地址，包括仓库路径（如 `https://mingcheng.github.io/astro-theme-grace/`），可直接部署到项目页面。如需使用自定义域名，在 Settings → Secrets and variables → Actions → Variables 中设置 `SITE_URL` 为完整地址（如 `https://www.example.com/`）。
 
-站内链接均以 `/` 开头，站点需部署在域名根路径：请使用自定义域名，或 `<用户名>.github.io` 仓库。
+本地开发默认使用项目路径 `http://localhost:4321/astro-theme-grace/`；若需要在域名根路径下开发或构建，可设置 `SITE_URL=https://example.com/`。

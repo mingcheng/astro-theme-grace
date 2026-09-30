@@ -26,6 +26,7 @@ Everything is imported through the `@/` alias (`@/*` → `src/*`, see `tsconfig.
   - `notes.ts` — `getNotes()` (collection sorted newest first), `getNoteUrl()`, `Note` type. Always go through `getNotes()` instead of calling `getCollection('notes')` directly.
   - `format.ts` — `formatChineseDate(Date)` (Asia/Shanghai), `toISODate`, `formatPercent`, `padNumber` (use it for every `01`-style sequence number).
   - `pagination.ts` — `getPageUrl(basePath, page)` and `getPaginationItems()` (ellipsis windowing) used by `Pagination.astro`.
+  - `urls.ts` — `withBase(path)` prefixes root-absolute internal links and public assets with Astro's `import.meta.env.BASE_URL`, while keeping anchors/external URLs intact.
   - `status.ts` — `StatusTone` (`healthy | warning | critical | neutral`), `HostStatus`, `statusLabels`, `getUsageTone` (≥90 critical, ≥70 warning).
 - **Data (`src/data/*.ts`)** — static configuration and mock data:
   - `site.ts` — `profile`, `SITE` (name, description, locale, `themeColor`, `notesPerPage`), `navLinks`, `footerLinks`. Header, footer and `BaseLayout` read from here — don't hard-code the site name.
@@ -38,8 +39,8 @@ Everything is imported through the `@/` alias (`@/*` → `src/*`, see `tsconfig.
   - `/dashboard` renders dashboard data; `/elements` is a living style guide that showcases every reusable component — update it (and `data/styleguide.ts`) when adding or changing a component.
 - **Layout**: every page wraps in `layouts/BaseLayout.astro` (optional `title`, `description`), which imports `styles/global.css` and emits title, description, canonical, Open Graph, sitemap and theme-color tags. Omit `title` on the home page to show just the site name.
 - **Components (`src/components/<group>/`)**: `layout/` (SiteHeader, SiteFooter), `ui/` (Icon, Pill, Heading, Avatar, Tooltip, Dropdown), `forms/`, `feedback/`, `navigation/`, `content/`, `data/` (dashboard widgets incl. `Panel`), `styleguide/` (`StyleguideSection`, `Specimen` — only for `/elements`).
-- `astro.config.mjs`: `@astrojs/sitemap` integration, `prefetch: true`, `site` from the `SITE_URL` env var (fallback placeholder `https://example.com`).
-- `.github/workflows/deploy.yml`: GitHub Pages deployment (mise → `pnpm install --frozen-lockfile` → `pnpm test` → `pnpm build`); PRs build only. Links are root-absolute, so the site must be served from a domain root.
+- `astro.config.mjs`: `@astrojs/sitemap` integration, `prefetch: true`, `site` and `base` from the full `SITE_URL` env var (fallback `https://mingcheng.github.io/astro-theme-grace/`).
+- `.github/workflows/deploy.yml`: GitHub Pages deployment (mise → `pnpm install --frozen-lockfile` → `pnpm test` → `pnpm build`); PRs build only. Uses Pages' full `base_url` (including project path) unless `SITE_URL` is set.
 
 ## Conventions
 

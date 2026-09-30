@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { withBase } from '@/lib/urls';
 
 export type Note = CollectionEntry<'notes'>;
 
@@ -6,4 +7,4 @@ export type Note = CollectionEntry<'notes'>;
 export const getNotes = async () =>
   (await getCollection('notes')).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 
-export const getNoteUrl = (note: Note) => `/notes/${note.id}`;
+export const getNoteUrl = (note: Note) => withBase(`/notes/${note.id}`);

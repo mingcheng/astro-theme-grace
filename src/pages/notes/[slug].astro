@@ -5,6 +5,7 @@ import Pill from '@/components/ui/Pill.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { formatChineseDate, toISODate } from '@/lib/format';
 import { getNotes, getNoteUrl } from '@/lib/notes';
+import { withBase } from '@/lib/urls';
 
 export const getStaticPaths = (async () => {
   const notes = await getNotes();
@@ -26,7 +27,7 @@ const { Content } = await render(note);
 <BaseLayout title={title} description={excerpt}>
   <article>
     <header class="article-head container">
-      <a class="back" href="/notes">← 返回文章</a>
+      <a class="back" href={withBase('/notes')}>← 返回文章</a>
       <div class="article-meta">
         <Pill label={category} />
         <time datetime={toISODate(publishedAt)}>{formatChineseDate(publishedAt)}</time>

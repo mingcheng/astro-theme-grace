@@ -2,6 +2,7 @@
 import Icon from '@/components/ui/Icon.astro';
 import { padNumber } from '@/lib/format';
 import { getPageUrl, getPaginationItems } from '@/lib/pagination';
+import { withBase } from '@/lib/urls';
 
 interface Props {
   currentPage: number;
@@ -17,7 +18,7 @@ const {
   label = '文章分页',
 } = Astro.props;
 
-const pageUrl = (page: number) => getPageUrl(basePath, page);
+const pageUrl = (page: number) => withBase(getPageUrl(basePath, page));
 const items = getPaginationItems(currentPage, totalPages);
 ---
 

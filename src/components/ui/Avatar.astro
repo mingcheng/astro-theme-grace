@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/lib/urls';
+
 interface Props {
   name: string;
   src?: string;
@@ -21,7 +23,7 @@ const getInitials = (value: string) => {
 ---
 
 <span class:list={['avatar', size]} title={name}>
-  {src ? <img src={src} alt={name} /> : <span role="img" aria-label={name}>{getInitials(name)}</span>}
+  {src ? <img src={withBase(src)} alt={name} /> : <span role="img" aria-label={name}>{getInitials(name)}</span>}
 </span>
 
 <style>

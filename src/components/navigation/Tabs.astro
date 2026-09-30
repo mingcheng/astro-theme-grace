@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/lib/urls';
+
 interface Item {
   label: string;
   href: string;
@@ -18,7 +20,7 @@ const { items, current, label = '分栏导航' } = Astro.props;
   <ul>
     {items.map((item) => (
       <li>
-        <a href={item.href} aria-current={item.href === current ? 'page' : undefined}>
+        <a href={withBase(item.href)} aria-current={item.href === current ? 'page' : undefined}>
           {item.label}
           {item.count !== undefined && <span class="count">{item.count}</span>}
         </a>

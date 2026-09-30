@@ -61,7 +61,7 @@ frontmatter 会在 `npm run check` / `npm run build` 时按 `src/content.config.
 - 站点名称、简介、导航与每页文章数：`src/data/site.ts`
 - 仪表盘示例数据：`src/data/dashboard.ts`
 - 色彩、字体等设计变量：`src/styles/tokens.css`
-- 正式部署前请把 `astro.config.mjs` 中的 `site` 改为真实域名（用于 canonical 链接与 sitemap）
+- 正式部署前请设置站点域名（用于 canonical 链接与 sitemap）：构建时读取环境变量 `SITE_URL`，未设置时回退到 `astro.config.mjs` 中的 `https://example.com`
 
 文章归档默认每页展示 10 篇，第一页为 `/notes`，后续页面由 Astro 的 `paginate()` 自动生成 `/notes/2` 等静态路由。
 
@@ -77,3 +77,12 @@ frontmatter 会在 `npm run check` / `npm run build` 时按 `src/content.config.
 - 内容卡片：`NoteCard`、`Card`、`Accordion` 折叠面板与 `Timeline` 时间线
 
 `Heading.astro` 统一眉题、标题与说明文字的排版，语义层级（`level`）与视觉尺寸（`size`）可分别设置。`Icon.astro` 提供一套本地细线图标，可通过类型安全的名称、尺寸和无障碍标签复用。
+
+## 部署到 GitHub Pages
+
+仓库自带工作流 `.github/workflows/deploy.yml`：推送到 `main` 或手动触发时，会通过 mise 安装 Node 与 pnpm，依次运行测试、`pnpm build`（含 `astro check`），并把 `dist` 发布到 GitHub Pages；Pull Request 只做测试与构建，不发布。
+
+1. 在仓库 Settings → Pages 中，将 Source 设为 **GitHub Actions**。
+2. 可选：在 Settings → Secrets and variables → Actions → Variables 中新增 `SITE_URL`（如 `https://www.example.com`）；未设置时使用 GitHub Pages 的域名。
+
+站内链接均以 `/` 开头，站点需部署在域名根路径：请使用自定义域名，或 `<用户名>.github.io` 仓库。

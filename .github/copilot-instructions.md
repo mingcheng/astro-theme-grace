@@ -38,7 +38,8 @@ Everything is imported through the `@/` alias (`@/*` → `src/*`, see `tsconfig.
   - `/dashboard` renders dashboard data; `/elements` is a living style guide that showcases every reusable component — update it (and `data/styleguide.ts`) when adding or changing a component.
 - **Layout**: every page wraps in `layouts/BaseLayout.astro` (optional `title`, `description`), which imports `styles/global.css` and emits title, description, canonical, Open Graph, sitemap and theme-color tags. Omit `title` on the home page to show just the site name.
 - **Components (`src/components/<group>/`)**: `layout/` (SiteHeader, SiteFooter), `ui/` (Icon, Pill, Heading, Avatar, Tooltip, Dropdown), `forms/`, `feedback/`, `navigation/`, `content/`, `data/` (dashboard widgets incl. `Panel`), `styleguide/` (`StyleguideSection`, `Specimen` — only for `/elements`).
-- `astro.config.mjs`: `@astrojs/sitemap` integration, `prefetch: true`, placeholder `site: 'https://example.com'`.
+- `astro.config.mjs`: `@astrojs/sitemap` integration, `prefetch: true`, `site` from the `SITE_URL` env var (fallback placeholder `https://example.com`).
+- `.github/workflows/deploy.yml`: GitHub Pages deployment (mise → `pnpm install --frozen-lockfile` → `pnpm test` → `pnpm build`); PRs build only. Links are root-absolute, so the site must be served from a domain root.
 
 ## Conventions
 

@@ -20,35 +20,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      # Node LTS + pnpm, same versions as local development (mise.toml)
-      - name: Setup mise
-        uses: jdx/mise-action@v5
-
-      - name: Get pnpm store path
-        id: pnpm-store
-        run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v6
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
         with:
-          path: ${{ steps.pnpm-store.outputs.path }}
-          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: pnpm-${{ runner.os }}-
+          deno-version: v2.9.6
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: deno ci
 
       - name: Test
-        run: pnpm test
+        run: deno task test
 
       - name: Configure Pages
         id: pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v6
 
-      # `pnpm build` runs `astro check` before `astro build`
+      # `deno task build` runs `astro check` before `astro build`
       - name: Build
-        run: pnpm build
+        run: deno task build
         env:
           SITE_URL: ${{ vars.SITE_URL || steps.pages.outputs.base_url }}
 

@@ -1,0 +1,21 @@
+{
+  "nodeModulesDir": "auto",
+  "imports": {
+    "@/": "./src/",
+    "@astrojs/check": "npm:@astrojs/check@^0.9.10",
+    "@astrojs/sitemap": "npm:@astrojs/sitemap@^3.7.4",
+    "astro": "npm:astro@^7.3.5",
+    "astro/": "npm:astro@^7.3.5/",
+    "typescript": "npm:typescript@^5.9.3",
+    "vitest": "npm:vitest@^3.2.7",
+    "vitest/": "npm:vitest@^3.2.7/"
+  },
+  "tasks": {
+    "dev": "deno run -A npm:astro@^7.3.5 dev",
+    "check": "deno run -A npm:astro@^7.3.5 check",
+    "build": "deno task check && deno run -A npm:astro@^7.3.5 build",
+    "preview": "deno run -A npm:astro@^7.3.5 preview",
+    "test": "deno run -A npm:vitest@^3.2.7 run",
+    "test:watch": "deno run -A npm:vitest@^3.2.7"
+  }
+}

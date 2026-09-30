@@ -4,17 +4,18 @@
 
 ## Commands
 
-The project is set up with `mise` (Node LTS + pnpm) and `node_modules` is pnpm-managed; the README uses `npm` equivalents. Both `package-lock.json` and `pnpm-lock.yaml` exist.
+The project uses Deno 2.9.6 or newer 2.x (`mise.toml` can install Deno locally; CI pins 2.9.6). `deno.json` defines npm-compatible dependencies and tasks; `deno.lock` pins versions, and Deno manages `node_modules` automatically. No Node.js or pnpm installation is needed.
 
 ```bash
-pnpm dev            # astro dev
-pnpm build          # runs `astro check` (type-check) BEFORE `astro build`; type errors fail the build
-pnpm check          # astro check only (TS + .astro type-check; there is no separate linter)
-pnpm test           # vitest run (only src/**/*.test.ts)
+deno install         # install dependencies and update deno.lock
+deno task dev        # astro dev
+deno task build      # runs `astro check` (type-check) BEFORE `astro build`; type errors fail the build
+deno task check      # astro check only (TS + .astro type-check; there is no separate linter)
+deno task test       # vitest run (only src/**/*.test.ts)
 
 # Single test file / single test by name
-npx vitest run src/lib/pagination.test.ts
-npx vitest run src/lib/pagination.test.ts -t "ellipses"
+deno task test src/lib/pagination.test.ts
+deno task test src/lib/pagination.test.ts -t "ellipses"
 ```
 
 ## Architecture
@@ -40,7 +41,7 @@ Everything is imported through the `@/` alias (`@/*` → `src/*`, see `tsconfig.
 - **Layout**: every page wraps in `layouts/BaseLayout.astro` (optional `title`, `description`), which imports `styles/global.css` and emits title, description, canonical, Open Graph, sitemap and theme-color tags. Omit `title` on the home page to show just the site name.
 - **Components (`src/components/<group>/`)**: `layout/` (SiteHeader, SiteFooter), `ui/` (Icon, Pill, Heading, Avatar, Tooltip, Dropdown), `forms/`, `feedback/`, `navigation/`, `content/`, `data/` (dashboard widgets incl. `Panel`), `styleguide/` (`StyleguideSection`, `Specimen` — only for `/elements`).
 - `astro.config.mjs`: `@astrojs/sitemap` integration, `prefetch: true`, `site` and `base` from the full `SITE_URL` env var (fallback `https://mingcheng.github.io/astro-theme-grace/`).
-- `.github/workflows/deploy.yml`: GitHub Pages deployment (mise → `pnpm install --frozen-lockfile` → `pnpm test` → `pnpm build`); PRs build only. Uses Pages' full `base_url` (including project path) unless `SITE_URL` is set.
+- `.github/workflows/deploy.yml`: GitHub Pages deployment (setup-deno → `deno ci` → `deno task test` → `deno task build`); PRs build only. Uses Pages' full `base_url` (including project path) unless `SITE_URL` is set.
 
 ## Conventions
 

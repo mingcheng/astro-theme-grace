@@ -6,17 +6,21 @@
 
 ## 开发
 
+安装 Deno 2.9.6 或更新的 2.x 版本（可运行 `mise install`），然后执行：
+
 ```bash
-npm install
-npm run dev
+deno install
+deno task dev
 ```
+
+项目依赖与命令定义在 `deno.json`，版本锁定在 `deno.lock`；Astro 使用 Deno 的 npm 兼容层，无需单独安装 Node.js 或 pnpm。
 
 ## 质量检查
 
 ```bash
-npm test
-npm run check
-npm run build
+deno task test
+deno task check
+deno task build
 ```
 
 ## 目录结构
@@ -54,7 +58,7 @@ featured: false # 可选，为 true 时出现在首页“编辑推荐”
 > 引用会以绛红色的大字呈现。
 ```
 
-frontmatter 会在 `npm run check` / `npm run build` 时按 `src/content.config.ts` 的 schema 校验。二级标题会自动编号。
+frontmatter 会在 `deno task check` / `deno task build` 时按 `src/content.config.ts` 的 schema 校验。二级标题会自动编号。
 
 ## 配置
 
@@ -80,7 +84,7 @@ frontmatter 会在 `npm run check` / `npm run build` 时按 `src/content.config.
 
 ## 部署到 GitHub Pages
 
-仓库自带工作流 `.github/workflows/deploy.yml`：推送到 `main` 或手动触发时，会通过 mise 安装 Node 与 pnpm，依次运行测试、`pnpm build`（含 `astro check`），并把 `dist` 发布到 GitHub Pages；Pull Request 只做测试与构建，不发布。
+仓库自带工作流 `.github/workflows/deploy.yml`：推送到 `main` 或手动触发时，会安装 Deno、运行 `deno ci` 校验锁文件、执行测试与 `deno task build`（含 `astro check`），并把 `dist` 发布到 GitHub Pages；Pull Request 只做测试与构建，不发布。
 
 1. 在仓库 Settings → Pages 中，将 Source 设为 **GitHub Actions**。
 2. 默认使用 GitHub Pages 返回的完整地址，包括仓库路径（如 `https://mingcheng.github.io/astro-theme-grace/`），可直接部署到项目页面。如需使用自定义域名，在 Settings → Secrets and variables → Actions → Variables 中设置 `SITE_URL` 为完整地址（如 `https://www.example.com/`）。

@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { note, index } = Astro.props;
-const { title, excerpt, category, publishedAt, readingMinutes } = note.data;
+const { title, excerpt, category, publishedAt } = note.data;
 const url = getNoteUrl(note);
 ---
 
@@ -22,7 +22,6 @@ const url = getNoteUrl(note);
       <time datetime={toISODate(publishedAt)}
         >{formatChineseDate(publishedAt)}</time
       >
-      {readingMinutes > 0 && <span>{readingMinutes} 分钟阅读</span>}
     </div>
     <h2><a href={url}>{title}</a></h2>
     <p>{excerpt}</p>

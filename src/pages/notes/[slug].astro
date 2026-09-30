@@ -20,7 +20,7 @@ export const getStaticPaths = (async () => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { note, nextNote } = Astro.props;
-const { title, excerpt, category, publishedAt, readingMinutes } = note.data;
+const { title, excerpt, category, publishedAt } = note.data;
 const { Content } = await render(note);
 ---
 
@@ -33,7 +33,6 @@ const { Content } = await render(note);
         <time datetime={toISODate(publishedAt)}
           >{formatChineseDate(publishedAt)}</time
         >
-        {readingMinutes > 0 && <span>{readingMinutes} 分钟阅读</span>}
       </div>
       <h1>{title}</h1>
       <p class="lead">{excerpt}</p>

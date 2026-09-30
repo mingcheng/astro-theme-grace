@@ -10,6 +10,7 @@ const notes = defineCollection({
     excerpt: z.string().min(10).default('').describe('文章摘要'),
     category: z.enum(['思考', '设计', '生活', '未分类']),
     publishedAt: z.coerce.date(),
+    featured: z.boolean().default(false).describe('是否为精选文章'),
   }),
 });
 

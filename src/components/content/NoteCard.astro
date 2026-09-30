@@ -1,7 +1,7 @@
 ---
-import Pill from '@/components/ui/Pill.astro';
-import { formatChineseDate, padNumber, toISODate } from '@/lib/format';
-import { getNoteUrl, type Note } from '@/lib/notes';
+import Pill from "@/components/ui/Pill.astro";
+import { formatChineseDate, padNumber, toISODate } from "@/lib/format";
+import { getNoteUrl, type Note } from "@/lib/notes";
 
 interface Props {
   note: Note;
@@ -19,8 +19,10 @@ const url = getNoteUrl(note);
   <div class="body">
     <div class="meta">
       <Pill label={category} />
-      <time datetime={toISODate(publishedAt)}>{formatChineseDate(publishedAt)}</time>
-      <span>{readingMinutes} 分钟阅读</span>
+      <time datetime={toISODate(publishedAt)}
+        >{formatChineseDate(publishedAt)}</time
+      >
+      {readingMinutes > 0 && <span>{readingMinutes} 分钟阅读</span>}
     </div>
     <h2><a href={url}>{title}</a></h2>
     <p>{excerpt}</p>

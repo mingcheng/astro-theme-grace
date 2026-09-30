@@ -1,4 +1,4 @@
-const chineseDateFormatter = new Intl.DateTimeFormat('en-US', {
+const chineseDateFormatter = new Intl.DateTimeFormat('zh-CN', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',

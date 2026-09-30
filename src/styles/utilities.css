@@ -17,6 +17,8 @@
 
 .display {
   margin: 0;
+  font-family: var(--title);
+    color: var(--accent);
   font-size: var(--h1);
   font-weight: 500;
   letter-spacing: -0.065em;
@@ -26,6 +28,8 @@
 .section-title {
   margin: 0;
   font-size: var(--h2);
+  font-family: var(--title);
+    color: var(--accent);
   font-weight: 500;
   letter-spacing: -0.045em;
   line-height: 1.25;

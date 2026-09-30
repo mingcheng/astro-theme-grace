@@ -1,8 +1,8 @@
 ---
-import Icon from '@/components/ui/Icon.astro';
-import { padNumber } from '@/lib/format';
-import { getPageUrl, getPaginationItems } from '@/lib/pagination';
-import { withBase } from '@/lib/urls';
+import Icon from "@/components/ui/Icon.astro";
+import { padNumber } from "@/lib/format";
+import { getPageUrl, getPaginationItems } from "@/lib/pagination";
+import { withBase } from "@/lib/urls";
 
 interface Props {
   currentPage: number;
@@ -14,8 +14,8 @@ interface Props {
 const {
   currentPage,
   totalPages,
-  basePath = '/notes',
-  label = '文章分页',
+  basePath = "/notes",
+  label = "文章分页",
 } = Astro.props;
 
 const pageUrl = (page: number) => withBase(getPageUrl(basePath, page));
@@ -38,19 +38,29 @@ const items = getPaginationItems(currentPage, totalPages);
   }
 
   <ol>
-    {items.map((item, index) => item === 'ellipsis' ? (
-      <li class="ellipsis" aria-hidden="true" data-key={`ellipsis-${index}`}>···</li>
-    ) : (
-      <li>
-        <a
-          href={pageUrl(item)}
-          aria-current={item === currentPage ? 'page' : undefined}
-          aria-label={`第 ${item} 页`}
-        >
-          {padNumber(item)}
-        </a>
-      </li>
-    ))}
+    {
+      items.map((item, index) =>
+        item === "ellipsis" ? (
+          <li
+            class="ellipsis"
+            aria-hidden="true"
+            data-key={`ellipsis-${index}`}
+          >
+            ···
+          </li>
+        ) : (
+          <li>
+            <a
+              href={pageUrl(item)}
+              aria-current={item === currentPage ? "page" : undefined}
+              aria-label={`第 ${item} 页`}
+            >
+              {padNumber(item)}
+            </a>
+          </li>
+        ),
+      )
+    }
   </ol>
 
   {
@@ -106,7 +116,7 @@ const items = getPaginationItems(currentPage, totalPages);
     border-color: var(--line);
   }
 
-  ol a[aria-current='page'] {
+  ol a[aria-current="page"] {
     color: var(--paper);
     border-color: var(--ink);
     background: var(--ink);

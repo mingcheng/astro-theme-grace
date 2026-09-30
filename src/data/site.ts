@@ -13,9 +13,9 @@ export interface NavLink {
 }
 
 export const profile: Profile = {
-  name: '林知夏',
-  role: '独立设计师与写作者',
-  location: '上海，中国',
+  name: '无标题文档',
+  role: '全栈工程师与写作者',
+  location: '杭州，中国',
   bio: '关注数字产品、文字与日常生活之间的关系。我相信克制的设计，能让复杂的信息变得亲切。',
   email: 'hello@example.com',
   availability: '目前接受 2026 年冬季的合作邀约',

@@ -1,31 +1,36 @@
 ---
-import { navLinks, SITE } from '@/data/site';
-import { withBase } from '@/lib/urls';
+import { navLinks, SITE } from "@/data/site";
+import { withBase } from "@/lib/urls";
 
 const { pathname } = Astro.url;
 const isActive = (href: string) => {
   const url = withBase(href);
-  return pathname === url || (href !== '/' && pathname.startsWith(`${url}/`));
+  return pathname === url || (href !== "/" && pathname.startsWith(`${url}/`));
 };
 ---
 
 <header class="header">
   <div class="container header-inner">
-    <a class="mark" href={withBase('/')} aria-label={`${SITE.name}的首页`}>
+    <a class="mark" href={withBase("/")} aria-label={`${SITE.name}的首页`}>
       <svg viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M24 2v44M2 24h44M8.5 8.5l31 31M39.5 8.5l-31 31" />
+        <path d="M24 2v44M2 24h44M8.5 8.5l31 31M39.5 8.5l-31 31"></path>
       </svg>
       <span>{SITE.name}</span>
     </a>
     <nav aria-label="主要导航">
       <ul>
-        {navLinks.map((link) => (
-          <li>
-            <a href={withBase(link.href)} aria-current={isActive(link.href) ? 'page' : undefined}>
-              {link.label}
-            </a>
-          </li>
-        ))}
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={withBase(link.href)}
+                aria-current={isActive(link.href) ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
   </div>
@@ -47,8 +52,10 @@ const isActive = (href: string) => {
     display: inline-flex;
     gap: 0.75rem;
     align-items: center;
+    color: var(--accent);
     font-size: var(--text-lg);
-    font-weight: 600;
+    font-family: var(--title);
+    font-weight: normal;
     text-decoration: none;
   }
 
@@ -76,7 +83,7 @@ const isActive = (href: string) => {
     text-decoration: none;
   }
 
-  nav a[aria-current='page'] {
+  nav a[aria-current="page"] {
     color: var(--ink);
     border-bottom: 1px solid var(--ink);
   }

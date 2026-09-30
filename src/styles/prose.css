@@ -19,6 +19,9 @@
   text-justify: inter-ideograph;
 }
 
+.prose>p {
+  text-indent: 2em;
+}
 .prose ul,
 .prose ol {
   margin: 0 0 1.6rem;

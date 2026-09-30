@@ -1,6 +1,6 @@
 ---
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-type HeadingSize = 'display' | 'section' | 'title' | 'subtitle' | 'label';
+type HeadingSize = "display" | "section" | "title" | "subtitle" | "label";
 
 interface Props {
   title: string;
@@ -9,30 +9,44 @@ interface Props {
   eyebrow?: string;
   description?: string;
   id?: string;
-  align?: 'start' | 'center';
+  align?: "start" | "center";
 }
 
 const defaultSizes: Record<HeadingLevel, HeadingSize> = {
-  1: 'display',
-  2: 'section',
-  3: 'title',
-  4: 'subtitle',
-  5: 'label',
-  6: 'label',
+  1: "display",
+  2: "section",
+  3: "title",
+  4: "subtitle",
+  5: "label",
+  6: "label",
 };
 
-const { title, level = 2, size = defaultSizes[level], eyebrow, description, id, align = 'start' } = Astro.props;
+const {
+  title,
+  level = 2,
+  size = defaultSizes[level],
+  eyebrow,
+  description,
+  id,
+  align = "start",
+} = Astro.props;
 const Tag = `h${level}` as const;
-const hasActions = Astro.slots.has('actions');
+const hasActions = Astro.slots.has("actions");
 ---
 
-<header class:list={['heading', align, { 'has-actions': hasActions }]}>
+<header class:list={["heading", align, { "has-actions": hasActions }]}>
   <div class="heading-copy">
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <Tag id={id} class:list={['heading-title', size]}>{title}</Tag>
+    <Tag id={id} class:list={["heading-title", size]}>{title}</Tag>
     {description && <p class="description">{description}</p>}
   </div>
-  {hasActions && <div class="actions"><slot name="actions" /></div>}
+  {
+    hasActions && (
+      <div class="actions">
+        <slot name="actions" />
+      </div>
+    )
+  }
 </header>
 
 <style>
@@ -71,9 +85,11 @@ const hasActions = Astro.slots.has('actions');
   }
 
   .display {
+    color: var(--accent);
     font-size: var(--h1);
     letter-spacing: -0.065em;
     line-height: 1.05;
+    font-family: var(--title);
   }
 
   .section {

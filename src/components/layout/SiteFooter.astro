@@ -1,16 +1,20 @@
 ---
-import { footerLinks, SITE } from '@/data/site';
-import { withBase } from '@/lib/urls';
+import { footerLinks, SITE } from "@/data/site";
+import { withBase } from "@/lib/urls";
 ---
 
 <footer>
   <div class="container footer-grid">
     <div>
-      <p class="footer-title">保持好奇，保持诚实。</p>
+      <p class="footer-title">精于心，简于形</p>
       <p class="muted">{SITE.description}</p>
     </div>
     <div class="links">
-      {footerLinks.map((link) => <a href={withBase(link.href)}>{link.label}</a>)}
+      {
+        footerLinks.map((link) => (
+          <a href={withBase(link.href)}>{link.label}</a>
+        ))
+      }
     </div>
     <p class="copyright">© {new Date().getFullYear()} {SITE.name}</p>
   </div>
@@ -31,6 +35,8 @@ import { withBase } from '@/lib/urls';
   .footer-title {
     margin: 0;
     font-size: var(--h3);
+    font-family: var(--title);
+    color: var(--accent);
   }
 
   .muted {

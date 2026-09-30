@@ -1,11 +1,11 @@
 ---
-import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
-import { render } from 'astro:content';
-import Pill from '@/components/ui/Pill.astro';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import { formatChineseDate, toISODate } from '@/lib/format';
-import { getNotes, getNoteUrl } from '@/lib/notes';
-import { withBase } from '@/lib/urls';
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { render } from "astro:content";
+import Pill from "@/components/ui/Pill.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { formatChineseDate, toISODate } from "@/lib/format";
+import { getNotes, getNoteUrl } from "@/lib/notes";
+import { withBase } from "@/lib/urls";
 
 export const getStaticPaths = (async () => {
   const notes = await getNotes();
@@ -27,11 +27,13 @@ const { Content } = await render(note);
 <BaseLayout title={title} description={excerpt}>
   <article>
     <header class="article-head container">
-      <a class="back" href={withBase('/notes')}>← 返回文章</a>
+      <a class="back" href={withBase("/notes")}>← 返回文章</a>
       <div class="article-meta">
         <Pill label={category} />
-        <time datetime={toISODate(publishedAt)}>{formatChineseDate(publishedAt)}</time>
-        <span>{readingMinutes} 分钟阅读</span>
+        <time datetime={toISODate(publishedAt)}
+          >{formatChineseDate(publishedAt)}</time
+        >
+        <!-- <span>{readingMinutes} 分钟阅读</span> -->
       </div>
       <h1>{title}</h1>
       <p class="lead">{excerpt}</p>
@@ -59,7 +61,7 @@ const { Content } = await render(note);
 
 <style>
   .article-head {
-    max-width: 950px;
+    max-width: 1024px;
     padding-top: 3rem;
     text-align: center;
   }
@@ -113,7 +115,7 @@ const { Content } = await render(note);
     flex: 1;
     height: 1px;
     background: var(--line);
-    content: '';
+    content: "";
   }
 
   .article-body {
@@ -143,6 +145,7 @@ const { Content } = await render(note);
     justify-content: space-between;
     color: inherit;
     font-size: var(--h4);
+    font-family: var(--title);
     line-height: 1.3;
     text-decoration: none;
   }

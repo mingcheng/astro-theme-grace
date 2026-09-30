@@ -7,11 +7,9 @@ const notes = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/notes' }),
   schema: z.object({
     title: z.string(),
-    excerpt: z.string().min(10),
-    category: z.enum(['思考', '设计', '生活']),
+    excerpt: z.string().min(10).default('').describe('文章摘要'),
+    category: z.enum(['思考', '设计', '生活', '未分类']),
     publishedAt: z.coerce.date(),
-    readingMinutes: z.number().int().positive(),
-    featured: z.boolean().default(false),
   }),
 });
 

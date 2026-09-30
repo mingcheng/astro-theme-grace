@@ -1,4 +1,9 @@
 /* 长文排版：用于 Markdown 渲染的文章正文，也用于元素规范中的正文示例 */
+.prose {
+  /* 中英文混排时，长串英文单词、链接或代码不会撑破容器；对所有子元素统一生效 */
+  overflow-wrap: break-word;
+}
+
 .prose h2 {
   clear: both;
   margin: 5rem 0 2rem;
@@ -20,8 +25,27 @@
   text-justify: inter-ideograph;
 }
 
-.prose>p {
-  text-indent: 2em;
+/* 斜体在中文字体中往往由浏览器强行倾斜笔画（合成斜体），观感生硬；
+   改用淡化的颜色表示强调或旁注（例如本文大量出现的英文原文译注），中英文都适用 */
+.prose em {
+  color: var(--muted);
+  font-style: normal;
+}
+
+/* Markdown 代码块（```lang）：Shiki 通过内联样式设置背景与文字颜色，用 !important 覆盖为墨色主题；
+   语法高亮的具体颜色沿用 Shiki 主题内联样式，不做改动 */
+.prose>pre {
+  margin: 2rem 0;
+  padding: 1.1rem 1.25rem;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--ink-line);
+  background-color: var(--ink) !important;
+  color: var(--paper) !important;
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+  line-height: 1.75;
+  tab-size: 2;
 }
 
 /* 清除 Figure 浮动插图，避免溢出正文容器 */
@@ -67,6 +91,42 @@
   font-size: 0.85em;
 }
 
+/* 表格：长文中的表格通常是说明性文字（而非仪表盘式的短数据），因此允许换行，
+   让列宽随内容自适应，避免整张表被迫横向滚动 */
+.prose table {
+  width: 100%;
+  margin: 0 0 1.6rem;
+  border: 1px solid var(--line);
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.prose th,
+.prose td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+
+.prose th {
+  color: var(--muted);
+  background: var(--paper-deep);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.prose tbody tr:hover {
+  background: var(--surface);
+}
 /* 引用：Markdown 的 > 引用与 Quote 组件共用 */
 .prose blockquote,
 .quote>blockquote {

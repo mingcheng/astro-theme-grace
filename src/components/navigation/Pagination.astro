@@ -1,0 +1,159 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { padNumber } from '@/lib/format';
+import { getPageUrl, getPaginationItems } from '@/lib/pagination';
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  basePath?: string;
+  label?: string;
+}
+
+const {
+  currentPage,
+  totalPages,
+  basePath = '/notes',
+  label = '文章分页',
+} = Astro.props;
+
+const pageUrl = (page: number) => getPageUrl(basePath, page);
+const items = getPaginationItems(currentPage, totalPages);
+---
+
+<nav class="pagination" aria-label={label}>
+  {
+    currentPage > 1 ? (
+      <a class="direction previous" href={pageUrl(currentPage - 1)} rel="prev">
+        <Icon name="arrowDown" size={15} />
+        <span>上一页</span>
+      </a>
+    ) : (
+      <span class="direction previous disabled" aria-disabled="true">
+        <Icon name="arrowDown" size={15} />
+        <span>上一页</span>
+      </span>
+    )
+  }
+
+  <ol>
+    {items.map((item, index) => item === 'ellipsis' ? (
+      <li class="ellipsis" aria-hidden="true" data-key={`ellipsis-${index}`}>···</li>
+    ) : (
+      <li>
+        <a
+          href={pageUrl(item)}
+          aria-current={item === currentPage ? 'page' : undefined}
+          aria-label={`第 ${item} 页`}
+        >
+          {padNumber(item)}
+        </a>
+      </li>
+    ))}
+  </ol>
+
+  {
+    currentPage < totalPages ? (
+      <a class="direction next" href={pageUrl(currentPage + 1)} rel="next">
+        <span>下一页</span>
+        <Icon name="arrowDown" size={15} />
+      </a>
+    ) : (
+      <span class="direction next disabled" aria-disabled="true">
+        <span>下一页</span>
+        <Icon name="arrowDown" size={15} />
+      </span>
+    )
+  }
+</nav>
+
+<style>
+  .pagination {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+  }
+
+  ol {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  ol a,
+  .ellipsis {
+    display: grid;
+    width: 2.3rem;
+    height: 2.3rem;
+    place-items: center;
+    color: var(--muted);
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
+
+  ol a:hover {
+    color: var(--ink);
+    border-color: var(--line);
+  }
+
+  ol a[aria-current='page'] {
+    color: var(--paper);
+    border-color: var(--ink);
+    background: var(--ink);
+  }
+
+  .ellipsis {
+    width: 1.5rem;
+  }
+
+  .direction {
+    display: inline-flex;
+    gap: 0.55rem;
+    align-items: center;
+    width: fit-content;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .direction :global(.icon) {
+    transform: rotate(90deg);
+  }
+
+  .next {
+    justify-self: end;
+  }
+
+  .next :global(.icon) {
+    transform: rotate(-90deg);
+  }
+
+  .disabled {
+    color: var(--line);
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 560px) {
+    .pagination {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    ol {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    .direction {
+      grid-row: 2;
+    }
+  }
+</style>

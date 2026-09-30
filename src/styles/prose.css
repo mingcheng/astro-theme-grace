@@ -1,0 +1,78 @@
+/* 长文排版：用于 Markdown 渲染的文章正文，也用于元素规范中的正文示例 */
+.prose h2 {
+  margin: 5rem 0 2rem;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.3;
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose p {
+  margin: 0 0 1.6rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.16rem);
+  line-height: 2.05;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 1.6rem;
+  padding-left: 1.4em;
+}
+
+.prose li + li {
+  margin-top: 0.45rem;
+}
+
+.prose li::marker {
+  color: var(--accent);
+  font-family: var(--sans);
+  font-size: 0.85em;
+}
+
+.prose :not(pre) > code {
+  padding: 0.1em 0.35em;
+  color: var(--accent-dark);
+  background: var(--paper-deep);
+  font-family: var(--mono);
+  font-size: 0.85em;
+}
+
+/* 引用：Markdown 的 > 引用与 Quote 组件共用 */
+.prose blockquote,
+.quote > blockquote {
+  margin: 3.5rem 0;
+  padding: 1.8rem 0 1.8rem 2rem;
+  color: var(--accent-dark);
+  border-left: 2px solid var(--accent);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1.7;
+}
+
+.prose blockquote p {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: inherit;
+}
+
+.quote {
+  margin: 3.5rem 0;
+}
+
+.quote > blockquote {
+  margin: 0;
+}
+
+.quote > figcaption {
+  margin-top: 1rem;
+  padding-left: 2rem;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+}

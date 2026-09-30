@@ -1,0 +1,54 @@
+---
+import Choice from '@/components/forms/Choice.astro';
+import Field from '@/components/forms/Field.astro';
+
+interface Option {
+  value: string;
+  label: string;
+  description?: string;
+  disabled?: boolean;
+}
+
+interface Props {
+  name: string;
+  legend: string;
+  options: Option[];
+  value?: string;
+  hint?: string;
+  required?: boolean;
+  inline?: boolean;
+}
+
+const { name, legend, options, value, hint, required = false, inline = false } = Astro.props;
+---
+
+<Field as="fieldset" label={legend} hint={hint} hintId={hint ? `${name}-hint` : undefined} required={required}>
+  <div class:list={['options', { inline }]}>
+    {options.map((option) => (
+      <Choice
+        id={`${name}-${option.value}`}
+        type="radio"
+        name={name}
+        value={option.value}
+        label={option.label}
+        description={option.description}
+        checked={option.value === value}
+        disabled={option.disabled}
+        required={required}
+      />
+    ))}
+  </div>
+</Field>
+
+<style>
+  .options {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .options.inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+  }
+</style>

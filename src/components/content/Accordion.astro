@@ -1,0 +1,75 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+
+interface Item {
+  title: string;
+  content: string;
+}
+
+interface Props {
+  items: Item[];
+  name?: string;
+  open?: number;
+}
+
+const { items, name, open } = Astro.props;
+---
+
+<div class="accordion">
+  {items.map((item, index) => (
+    <details name={name} open={index === open}>
+      <summary>
+        <span>{item.title}</span>
+        <Icon name="plus" size={16} />
+      </summary>
+      <p>{item.content}</p>
+    </details>
+  ))}
+</div>
+
+<style>
+  .accordion {
+    border-top: 1px solid var(--line);
+  }
+
+  details {
+    border-bottom: 1px solid var(--line);
+  }
+
+  summary {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 0;
+    font-size: 1.05rem;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:hover {
+    color: var(--accent-dark);
+  }
+
+  summary :global(.icon) {
+    color: var(--muted);
+    transition: transform 200ms ease;
+  }
+
+  details[open] summary :global(.icon) {
+    color: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  p {
+    max-width: 44rem;
+    margin: 0;
+    padding: 0 2rem 1.3rem 0;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+</style>

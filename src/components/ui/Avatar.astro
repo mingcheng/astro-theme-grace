@@ -1,0 +1,49 @@
+---
+interface Props {
+  name: string;
+  src?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { name, src, size = 'md' } = Astro.props;
+
+const getInitials = (value: string) => {
+  const trimmed = value.trim();
+  if (/[\u4e00-\u9fff]/.test(trimmed)) {
+    return trimmed.length > 2 ? trimmed.slice(-2) : trimmed;
+  }
+  return trimmed
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+};
+---
+
+<span class:list={['avatar', size]} title={name}>
+  {src ? <img src={src} alt={name} /> : <span role="img" aria-label={name}>{getInitials(name)}</span>}
+</span>
+
+<style>
+  .avatar {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    overflow: hidden;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    background: var(--paper-deep);
+    font-family: var(--serif);
+    line-height: 1;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sm { width: 2rem; height: 2rem; font-size: 0.7rem; }
+  .md { width: 2.75rem; height: 2.75rem; font-size: 0.9rem; }
+  .lg { width: 4rem; height: 4rem; font-size: 1.2rem; }
+</style>

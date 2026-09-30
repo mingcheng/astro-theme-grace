@@ -1,0 +1,61 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'section'> {
+  id: string;
+  title: string;
+  eyebrow?: string;
+  /** 标题右侧的简短说明；需要链接或按钮时改用 actions 插槽。 */
+  note?: string;
+}
+
+const { id, title, eyebrow, note, class: className, ...attrs } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<section id={id} class:list={['panel', className]} aria-labelledby={titleId} {...attrs}>
+  <header class="panel-head">
+    <div>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2 id={titleId}>{title}</h2>
+    </div>
+    {note && <span class="panel-note">{note}</span>}
+    <slot name="actions" />
+  </header>
+  <slot />
+</section>
+
+<style>
+  .panel {
+    min-width: 0;
+    padding: clamp(1.2rem, 3vw, 2rem);
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .panel-head {
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.45rem;
+    font-size: 0.62rem;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  .panel-note,
+  .panel-head > :global(a) {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.65rem;
+  }
+</style>

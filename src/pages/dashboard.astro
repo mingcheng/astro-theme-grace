@@ -1,0 +1,214 @@
+---
+import DataTable from '@/components/data/DataTable.astro';
+import DonutChart from '@/components/data/DonutChart.astro';
+import MetricCard from '@/components/data/MetricCard.astro';
+import Panel from '@/components/data/Panel.astro';
+import ProgressBar from '@/components/data/ProgressBar.astro';
+import Sparkline from '@/components/data/Sparkline.astro';
+import StatusBadge from '@/components/data/StatusBadge.astro';
+import { activities, getAverage, hosts, storageSegments, trafficTrend } from '@/data/dashboard';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { statusLabels } from '@/lib/status';
+
+const healthyHosts = hosts.filter((host) => host.status === 'healthy').length;
+const unhealthyHosts = hosts.length - healthyHosts;
+const averageCpu = getAverage(hosts.map((host) => host.cpu));
+const averageMemory = getAverage(hosts.map((host) => host.memory));
+
+const hostColumns = [
+  { key: 'host', label: '主机' },
+  { key: 'region', label: '区域' },
+  { key: 'status', label: '状态' },
+  { key: 'cpu', label: 'CPU', align: 'right' },
+  { key: 'memory', label: '内存', align: 'right' },
+  { key: 'latency', label: '延迟', align: 'right' },
+  { key: 'uptime', label: '运行时间', align: 'right' },
+] as const;
+
+const hostRows = hosts.map((host) => ({
+  host: host.name,
+  region: host.region,
+  status: statusLabels[host.status],
+  cpu: `${host.cpu}%`,
+  memory: `${host.memory}%`,
+  latency: `${host.latency} ms`,
+  uptime: host.uptime,
+}));
+---
+
+<BaseLayout title="运行状态" description="用于展示主机、流量与运行事件的仪表盘模板。">
+  <header class="dashboard-head container">
+    <div>
+      <p class="eyebrow">System overview / 实时概览</p>
+      <h1>运行状态</h1>
+    </div>
+    <div class="head-status">
+      <StatusBadge tone="warning" label={`${unhealthyHosts} 项服务需要关注`} pulse />
+      <span>最后更新：23:40:02</span>
+    </div>
+  </header>
+
+  <div class="dashboard container">
+    <section class="metrics" aria-label="关键指标">
+      <MetricCard icon="server" label="在线主机" value={`${healthyHosts} / ${hosts.length}`} change="+1" helper="过去 24 小时" tone="healthy" />
+      <MetricCard icon="cpu" label="平均 CPU" value={`${averageCpu}%`} change="+8.4%" helper="较上一小时" tone="warning" />
+      <MetricCard icon="memory" label="平均内存" value={`${averageMemory}%`} change="+2.1%" helper="较上一小时" />
+      <MetricCard icon="activity" label="本月可用性" value="99.96%" change="+0.02%" helper="目标 99.9%" tone="healthy" />
+    </section>
+
+    <Panel id="traffic" eyebrow="网络 / 过去 12 小时" title="入站流量" note="峰值 1.24 GB/s">
+      <Sparkline values={trafficTrend} label="当前吞吐量" unit=" MB/s" />
+      <div class="axis" aria-hidden="true"><span>12:00</span><span>18:00</span><span>现在</span></div>
+    </Panel>
+
+    <Panel id="resources" eyebrow="资源 / 总计" title="存储分布">
+      <DonutChart title="已使用" value="68%" segments={storageSegments} />
+    </Panel>
+
+    <Panel id="hosts" eyebrow={`节点 / ${hosts.length}`} title="主机资源">
+      <a slot="actions" href="#host-table">查看详细列表 ↓</a>
+      <div class="host-list">
+        {hosts.map((host) => (
+          <article>
+            <div class="host-name">
+              <StatusBadge tone={host.status} label={host.name} />
+              <span>{host.region} · {host.latency} ms</span>
+            </div>
+            <ProgressBar label="CPU" value={host.cpu} />
+            <ProgressBar label="内存" value={host.memory} />
+          </article>
+        ))}
+      </div>
+    </Panel>
+
+    <Panel id="activity" eyebrow="事件 / 今日" title="最近动态" class="activity">
+      <ol>
+        {activities.map((activity) => (
+          <li>
+            <time>{activity.time}</time>
+            <StatusBadge tone={activity.status} label={activity.event} />
+            <code>{activity.target}</code>
+          </li>
+        ))}
+      </ol>
+    </Panel>
+
+    <Panel id="host-table" eyebrow="Inventory / 清单" title="全部主机" class="table-panel">
+      <button slot="actions" class="button quiet" type="button">导出 CSV</button>
+      <DataTable caption="全部主机运行状态" columns={[...hostColumns]} rows={hostRows} />
+    </Panel>
+  </div>
+</BaseLayout>
+
+<style>
+  .dashboard-head {
+    display: flex;
+    gap: 2rem;
+    align-items: end;
+    justify-content: space-between;
+    padding: clamp(3.5rem, 7vw, 6rem) 0 2.5rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+
+  .head-status {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: end;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.65rem;
+  }
+
+  .dashboard {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 1fr);
+    gap: 1rem;
+    padding-bottom: 8rem;
+  }
+
+  .metrics {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .axis {
+    display: flex;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+
+  .host-list {
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  .host-list article {
+    display: grid;
+    grid-template-columns: minmax(11rem, 1.2fr) 1fr 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .host-name > span {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.62rem;
+  }
+
+  .activity ol {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .activity li {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 0.4rem 0.8rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .activity time,
+  .activity code {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.62rem;
+  }
+
+  .activity code {
+    grid-column: 2;
+  }
+
+  .table-panel {
+    grid-column: 1 / -1;
+    overflow: hidden;
+  }
+
+  @media (max-width: 900px) {
+    .dashboard { grid-template-columns: 1fr; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .table-panel { grid-column: auto; }
+  }
+
+  @media (max-width: 620px) {
+    .dashboard-head { display: block; }
+    .head-status { justify-items: start; margin-top: 1.5rem; }
+    .metrics { grid-template-columns: 1fr; }
+    .host-list article { grid-template-columns: 1fr; gap: 0.7rem; }
+  }
+</style>

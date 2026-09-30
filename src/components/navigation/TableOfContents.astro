@@ -1,0 +1,71 @@
+---
+import { padNumber } from '@/lib/format';
+
+interface Item {
+  id: string;
+  label: string;
+  level?: 2 | 3;
+}
+
+interface Props {
+  items: Item[];
+  title?: string;
+}
+
+const { items, title = '本页目录' } = Astro.props;
+---
+
+<nav class="toc" aria-label={title}>
+  <p>{title}</p>
+  <ol>
+    {items.map((item, index) => (
+      <li class:list={{ nested: item.level === 3 }}>
+        <a href={`#${item.id}`}>
+          <span>{padNumber(index + 1)}</span>
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .toc {
+    padding: 1.3rem;
+    border: 1px solid var(--line);
+  }
+
+  .toc > p {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.65rem;
+  }
+
+  ol {
+    display: grid;
+    gap: 0.55rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  a {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  a span {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.6rem;
+  }
+
+  .nested {
+    padding-left: 1rem;
+  }
+</style>

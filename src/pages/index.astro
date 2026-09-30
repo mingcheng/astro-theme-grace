@@ -1,0 +1,291 @@
+---
+import NoteCard from '@/components/content/NoteCard.astro';
+import Pill from '@/components/ui/Pill.astro';
+import { profile } from '@/data/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getNotes, getNoteUrl } from '@/lib/notes';
+
+const notes = await getNotes();
+const recentNotes = notes.slice(0, 3);
+const featured = notes.find((note) => note.data.featured) ?? notes[0];
+---
+
+<BaseLayout description={profile.bio}>
+  <section class="hero container">
+    <div class="hero-copy">
+      <p class="eyebrow">独立设计师 · 写作者 · 上海</p>
+      <h1 class="display">设计是<br /><em>温柔的</em>秩序。</h1>
+    </div>
+    <div class="hero-aside">
+      <p>{profile.bio}</p>
+      <a class="text-link" href={`mailto:${profile.email}`}>与我联系 <span>↗</span></a>
+    </div>
+    <div class="orb" aria-hidden="true">
+      <svg viewBox="0 0 360 360">
+        <circle cx="180" cy="180" r="132" />
+        <ellipse cx="180" cy="180" rx="132" ry="52" />
+        <ellipse cx="180" cy="180" rx="52" ry="132" />
+        <path d="M48 180h264M180 48v264" />
+      </svg>
+    </div>
+  </section>
+
+  <section class="statement inverse">
+    <div class="container statement-grid">
+      <p class="eyebrow">关于我 / 01</p>
+      <p class="large-copy">
+        我在复杂与清晰之间工作，<br />
+        为<span>真实的人</span>创造长久的体验。
+      </p>
+      <div class="fact">
+        <span>现居</span>
+        <strong>{profile.location}</strong>
+      </div>
+      <div class="fact">
+        <span>状态</span>
+        <strong>{profile.availability}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="work container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">最近写作 / 02</p>
+        <h2 class="section-title">关于创造与生活的笔记</h2>
+      </div>
+      <a href="/notes">查看全部文章 →</a>
+    </div>
+    {recentNotes.map((note, index) => <NoteCard note={note} index={index} />)}
+  </section>
+
+  <section class="feature">
+    <div class="container feature-grid">
+      <div class="feature-art" aria-hidden="true">
+        <span>静</span>
+        <svg viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="190" />
+          <circle cx="250" cy="250" r="130" />
+          <circle cx="250" cy="250" r="70" />
+          <path d="M60 250h380M250 60v380" />
+        </svg>
+      </div>
+      <div class="feature-copy">
+        <Pill label="编辑推荐" tone="accent" />
+        <h2>{featured.data.title}</h2>
+        <p>{featured.data.excerpt}</p>
+        <a class="button" href={getNoteUrl(featured)}>开始阅读 <span>→</span></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(15rem, 0.8fr);
+    gap: 3rem;
+    min-height: 720px;
+    padding-top: clamp(5rem, 11vw, 9rem);
+    padding-bottom: 5rem;
+    overflow: hidden;
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 1;
+  }
+
+  .display em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .hero-aside {
+    position: relative;
+    z-index: 1;
+    align-self: end;
+    padding-bottom: 4rem;
+  }
+
+  .hero-aside p {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 2;
+  }
+
+  .text-link {
+    display: inline-flex;
+    gap: 3rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid currentColor;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+
+  .orb {
+    position: absolute;
+    right: 18%;
+    bottom: 1rem;
+    width: min(38vw, 420px);
+    color: var(--line);
+  }
+
+  .orb svg,
+  .feature-art svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 0.8;
+  }
+
+  .statement {
+    padding: clamp(5rem, 10vw, 9rem) 0;
+  }
+
+  .statement-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem 2rem;
+  }
+
+  .large-copy {
+    grid-column: 1 / -1;
+    max-width: 1000px;
+    margin: 0;
+    font-size: clamp(2rem, 5.2vw, 5.2rem);
+    line-height: 1.45;
+    letter-spacing: -0.04em;
+  }
+
+  .large-copy span {
+    color: var(--accent-light);
+  }
+
+  .fact {
+    display: grid;
+    gap: 0.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--ink-line);
+  }
+
+  .fact span {
+    color: var(--ink-muted);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+  }
+
+  .fact strong {
+    font-weight: 400;
+  }
+
+  .work {
+    padding: clamp(5rem, 9vw, 8rem) 0;
+  }
+
+  .section-head {
+    display: flex;
+    gap: 2rem;
+    align-items: end;
+    justify-content: space-between;
+    padding-bottom: 3rem;
+  }
+
+  .section-head > a {
+    flex: none;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+  }
+
+  .feature {
+    padding: 6rem 0;
+    background: var(--paper-deep);
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 8vw, 8rem);
+    align-items: center;
+  }
+
+  .feature-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    color: var(--line-strong);
+    background: var(--paper);
+    overflow: hidden;
+  }
+
+  .feature-art span {
+    position: absolute;
+    z-index: 1;
+    color: var(--accent);
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 1;
+  }
+
+  .feature-art svg {
+    width: 88%;
+  }
+
+  .feature-copy h2 {
+    margin: 1.5rem 0;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1.2;
+  }
+
+  .feature-copy p {
+    max-width: 34rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  .feature-copy .button {
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: 650px;
+    }
+
+    .hero-aside {
+      align-self: start;
+      max-width: 28rem;
+    }
+
+    .orb {
+      right: -4rem;
+      width: 300px;
+    }
+
+    .feature-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .statement-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .section-head {
+      display: block;
+    }
+
+    .section-head > a {
+      display: inline-block;
+      margin-top: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+import type { StatusTone } from '@/lib/status';
+
+interface Item {
+  time: string;
+  title: string;
+  description?: string;
+  tone?: StatusTone;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="timeline">
+  {items.map((item) => (
+    <li data-tone={item.tone ?? 'neutral'}>
+      <span class="marker" aria-hidden="true"></span>
+      <time>{item.time}</time>
+      <div>
+        <strong>{item.title}</strong>
+        {item.description && <p>{item.description}</p>}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 1.6rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .timeline::before {
+    position: absolute;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    left: 0.25rem;
+    width: 1px;
+    background: var(--line);
+    content: '';
+  }
+
+  li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1rem;
+    padding-left: 1.6rem;
+  }
+
+  .marker {
+    position: absolute;
+    top: 0.45rem;
+    left: 0;
+    width: 0.55rem;
+    height: 0.55rem;
+    border: 1px solid var(--tone);
+    background: var(--paper);
+  }
+
+  li:not([data-tone='neutral']) .marker {
+    background: var(--tone);
+  }
+
+  time {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    line-height: 1.9;
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  p {
+    margin: 0.2rem 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    li {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+import type { StatusTone } from '@/lib/status';
+
+interface Props {
+  tone: StatusTone;
+  label: string;
+  pulse?: boolean;
+}
+
+const { tone, label, pulse = false } = Astro.props;
+---
+
+<span class="status" data-tone={tone}>
+  <span class:list={['dot', { pulse }]} aria-hidden="true"></span>
+  {label}
+</span>
+
+<style>
+  .status {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: center;
+    width: fit-content;
+    color: var(--tone);
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .pulse {
+    box-shadow: 0 0 0 0 currentColor;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    70% { box-shadow: 0 0 0 0.35rem transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+</style>

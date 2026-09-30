@@ -1,0 +1,148 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { render } from 'astro:content';
+import Pill from '@/components/ui/Pill.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatChineseDate, toISODate } from '@/lib/format';
+import { getNotes, getNoteUrl } from '@/lib/notes';
+
+export const getStaticPaths = (async () => {
+  const notes = await getNotes();
+
+  return notes.map((note, index) => ({
+    params: { slug: note.id },
+    // “继续阅读”循环指向下一篇，最后一篇回到第一篇
+    props: { note, nextNote: notes[(index + 1) % notes.length] },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { note, nextNote } = Astro.props;
+const { title, excerpt, category, publishedAt, readingMinutes } = note.data;
+const { Content } = await render(note);
+---
+
+<BaseLayout title={title} description={excerpt}>
+  <article>
+    <header class="article-head container">
+      <a class="back" href="/notes">← 返回文章</a>
+      <div class="article-meta">
+        <Pill label={category} />
+        <time datetime={toISODate(publishedAt)}>{formatChineseDate(publishedAt)}</time>
+        <span>{readingMinutes} 分钟阅读</span>
+      </div>
+      <h1>{title}</h1>
+      <p class="lead">{excerpt}</p>
+    </header>
+
+    <div class="article-rule container" aria-hidden="true">
+      <span>✦</span>
+    </div>
+
+    <div class="article-body prose container">
+      <Content />
+    </div>
+
+    <footer class="article-footer inverse">
+      <div class="container next">
+        <p class="eyebrow">继续阅读</p>
+        <a href={getNoteUrl(nextNote)}>
+          <span>{nextNote.data.title}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .article-head {
+    max-width: 950px;
+    padding-top: 3rem;
+    text-align: center;
+  }
+
+  .back {
+    display: block;
+    margin-bottom: clamp(4rem, 9vw, 8rem);
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.72rem;
+  }
+
+  h1 {
+    margin: 1.5rem auto 2rem;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 500;
+    letter-spacing: -0.07em;
+    line-height: 1.12;
+  }
+
+  .lead {
+    max-width: 42rem;
+    margin: 0 auto 5rem;
+    color: var(--muted);
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    line-height: 2;
+  }
+
+  .article-rule {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: var(--accent);
+  }
+
+  .article-rule::before,
+  .article-rule::after {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+    content: '';
+  }
+
+  .article-body {
+    max-width: 760px;
+    padding: clamp(4rem, 9vw, 8rem) 0;
+    counter-reset: section;
+  }
+
+  /* Markdown 渲染的标题不带作用域属性，需要 :global() 选中；序号由 CSS 计数器生成 */
+  .article-body :global(h2)::before {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--accent-dark);
+    content: counter(section, decimal-leading-zero);
+    counter-increment: section;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0;
+  }
+
+  .article-footer {
+    padding: 5rem 0;
+  }
+
+  .next a {
+    display: flex;
+    justify-content: space-between;
+    color: inherit;
+    font-size: clamp(2.2rem, 6vw, 5rem);
+    line-height: 1.3;
+    text-decoration: none;
+  }
+</style>

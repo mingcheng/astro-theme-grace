@@ -1,0 +1,121 @@
+---
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+type HeadingSize = 'display' | 'section' | 'title' | 'subtitle' | 'label';
+
+interface Props {
+  title: string;
+  level?: HeadingLevel;
+  size?: HeadingSize;
+  eyebrow?: string;
+  description?: string;
+  id?: string;
+  align?: 'start' | 'center';
+}
+
+const defaultSizes: Record<HeadingLevel, HeadingSize> = {
+  1: 'display',
+  2: 'section',
+  3: 'title',
+  4: 'subtitle',
+  5: 'label',
+  6: 'label',
+};
+
+const { title, level = 2, size = defaultSizes[level], eyebrow, description, id, align = 'start' } = Astro.props;
+const Tag = `h${level}` as const;
+const hasActions = Astro.slots.has('actions');
+---
+
+<header class:list={['heading', align, { 'has-actions': hasActions }]}>
+  <div class="heading-copy">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <Tag id={id} class:list={['heading-title', size]}>{title}</Tag>
+    {description && <p class="description">{description}</p>}
+  </div>
+  {hasActions && <div class="actions"><slot name="actions" /></div>}
+</header>
+
+<style>
+  .heading {
+    display: grid;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .heading.has-actions {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  .center {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .center .description {
+    margin-inline: auto;
+  }
+
+  .heading-copy {
+    min-width: 0;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.8rem;
+  }
+
+  .heading-title {
+    margin: 0;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  .display {
+    font-size: clamp(3rem, 8vw, 7.5rem);
+    letter-spacing: -0.065em;
+    line-height: 1.05;
+  }
+
+  .section {
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    letter-spacing: -0.045em;
+    line-height: 1.25;
+  }
+
+  .title {
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    letter-spacing: -0.03em;
+    line-height: 1.35;
+  }
+
+  .subtitle {
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+  }
+
+  .label {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .description {
+    max-width: 40rem;
+    margin: 1rem 0 0;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .actions {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 640px) {
+    .heading.has-actions {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

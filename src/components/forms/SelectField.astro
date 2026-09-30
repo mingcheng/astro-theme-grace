@@ -1,0 +1,80 @@
+---
+import Field from '@/components/forms/Field.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Option {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+interface Props {
+  id: string;
+  label: string;
+  options: Option[];
+  name?: string;
+  value?: string;
+  placeholder?: string;
+  hint?: string;
+  error?: string;
+  required?: boolean;
+  disabled?: boolean;
+}
+
+const {
+  id,
+  label,
+  options,
+  name = id,
+  value,
+  placeholder,
+  hint,
+  error,
+  required = false,
+  disabled = false,
+} = Astro.props;
+
+const hintId = hint ? `${id}-hint` : undefined;
+const errorId = error ? `${id}-error` : undefined;
+const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
+---
+
+<Field label={label} for={id} hint={hint} hintId={hintId} error={error} errorId={errorId} required={required}>
+  <div class="select">
+    <select
+      class="control"
+      id={id}
+      name={name}
+      required={required}
+      disabled={disabled}
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={describedBy}
+    >
+      {placeholder && <option value="" disabled selected={!value}>{placeholder}</option>}
+      {options.map((option) => (
+        <option value={option.value} disabled={option.disabled} selected={option.value === value}>{option.label}</option>
+      ))}
+    </select>
+    <Icon name="chevronDown" size={16} />
+  </div>
+</Field>
+
+<style>
+  .select {
+    position: relative;
+  }
+
+  select {
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+
+  .select :global(.icon) {
+    position: absolute;
+    top: 50%;
+    right: 0.85rem;
+    color: var(--muted);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+</style>

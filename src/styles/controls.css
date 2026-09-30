@@ -1,0 +1,80 @@
+/* 按钮与表单控件 */
+.button {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  color: var(--paper);
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.button.quiet {
+  color: var(--ink);
+  border-color: var(--line);
+  background: transparent;
+}
+
+.button.quiet:hover {
+  color: var(--accent-dark);
+  border-color: currentColor;
+}
+
+.button:disabled,
+.button[aria-disabled='true'] {
+  color: var(--muted);
+  border-color: var(--line);
+  background: var(--paper-deep);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 文本输入、下拉选择等表单控件的统一外观 */
+.control {
+  width: 100%;
+  min-width: 0;
+  padding: 0.7rem 0.9rem;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--surface);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  appearance: none;
+}
+
+.control::placeholder {
+  color: var(--muted);
+}
+
+.control:hover {
+  border-color: var(--line-strong);
+}
+
+.control:focus-visible {
+  border-color: var(--ink);
+  outline: 1px solid var(--ink);
+  outline-offset: -2px;
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--critical);
+}
+
+.control:disabled {
+  color: var(--muted);
+  background: var(--paper-deep);
+  cursor: not-allowed;
+}

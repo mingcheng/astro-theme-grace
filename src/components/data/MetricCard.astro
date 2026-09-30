@@ -1,0 +1,78 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import type { StatusTone } from '@/lib/status';
+import type { IconName } from '@/data/icons';
+
+interface Props {
+  label: string;
+  value: string;
+  change?: string;
+  helper?: string;
+  tone?: StatusTone;
+  icon?: IconName;
+}
+
+const { label, value, change, helper, tone = 'neutral', icon } = Astro.props;
+---
+
+<article class="metric">
+  <div class="metric-head">
+    <span class="label">{icon && <Icon name={icon} size={15} />}{label}</span>
+    <span class="indicator" data-tone={tone} aria-hidden="true"></span>
+  </div>
+  <strong>{value}</strong>
+  <div class="metric-foot">
+    {change && <span class="change" data-tone={tone}>{change}</span>}
+    {helper && <span>{helper}</span>}
+  </div>
+</article>
+
+<style>
+  .metric {
+    min-width: 0;
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .metric-head,
+  .metric-foot {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.68rem;
+  }
+
+  .label {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: center;
+  }
+
+  .indicator {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--line);
+  }
+
+  strong {
+    display: block;
+    margin: 1.2rem 0 0.8rem;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .change {
+    color: var(--tone);
+  }
+
+  .indicator:not([data-tone='neutral']) {
+    background: var(--tone);
+  }
+</style>

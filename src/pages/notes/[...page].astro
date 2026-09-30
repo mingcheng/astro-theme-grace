@@ -1,0 +1,115 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import NoteCard from '@/components/content/NoteCard.astro';
+import Pagination from '@/components/navigation/Pagination.astro';
+import Pill from '@/components/ui/Pill.astro';
+import { SITE } from '@/data/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { padNumber } from '@/lib/format';
+import { getNotes } from '@/lib/notes';
+
+// 生成 /notes、/notes/2 …；文章详情 /notes/[slug] 的命名参数优先级高于此处的剩余参数。
+export const getStaticPaths = (async ({ paginate }) => {
+  return paginate(await getNotes(), { pageSize: SITE.notesPerPage });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { page } = Astro.props;
+const categories = ['全部', ...new Set(page.data.map((note) => note.data.category))];
+const title = page.currentPage === 1 ? '文章' : `文章 · 第 ${page.currentPage} 页`;
+---
+
+<BaseLayout title={title} description="关于设计、思考与生活的文章归档。">
+  <header class="page-head container">
+    <p class="eyebrow">文章归档 / Notes</p>
+    <div class="title-row">
+      <h1 class="display">持续思考，<br />缓慢记录。</h1>
+      <p>这里收录我关于数字产品、中文排版、独立工作与日常生活的观察。</p>
+    </div>
+  </header>
+
+  <section class="archive container" aria-labelledby="archive-title">
+    <div class="archive-bar">
+      <h2 id="archive-title">全部文章</h2>
+      <div class="categories" aria-label="当前页文章分类">
+        {categories.map((category, index) => (
+          <Pill label={category} tone={index === 0 ? 'accent' : 'quiet'} />
+        ))}
+      </div>
+      <span class="count">{padNumber(page.total)} 篇</span>
+    </div>
+    {page.data.map((note, index) => <NoteCard note={note} index={page.start + index} />)}
+    <Pagination currentPage={page.currentPage} totalPages={page.lastPage} basePath="/notes" />
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding: clamp(5rem, 10vw, 9rem) 0 clamp(4rem, 8vw, 7rem);
+  }
+
+  .title-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: end;
+  }
+
+  .title-row .display {
+    font-size: clamp(3.6rem, 8vw, 7rem);
+  }
+
+  .title-row > p {
+    max-width: 28rem;
+    margin: 0 0 0.5rem;
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  .archive {
+    padding-bottom: 8rem;
+  }
+
+  .archive-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 4rem;
+    gap: 2rem;
+    align-items: center;
+    padding-bottom: 1.3rem;
+  }
+
+  .archive-bar h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .categories {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .count {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    text-align: right;
+  }
+
+  @media (max-width: 760px) {
+    .title-row {
+      grid-template-columns: 1fr;
+    }
+
+    .archive-bar {
+      grid-template-columns: 1fr auto;
+    }
+
+    .categories {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      overflow-x: auto;
+    }
+  }
+</style>

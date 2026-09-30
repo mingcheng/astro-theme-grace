@@ -1,0 +1,33 @@
+---
+interface Props {
+  label: string;
+  tone?: 'default' | 'accent' | 'quiet';
+}
+
+const { label, tone = 'default' } = Astro.props;
+---
+
+<span class:list={['pill', tone]}>{label}</span>
+
+<style>
+  .pill {
+    display: inline-flex;
+    padding: 0.28rem 0.68rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+
+  .accent {
+    color: var(--accent-dark);
+    border-color: var(--accent);
+  }
+
+  .quiet {
+    border-color: transparent;
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import { formatPercent } from '@/lib/format';
+import { getUsageTone } from '@/lib/status';
+
+interface Props {
+  label: string;
+  value: number;
+  max?: number;
+  showValue?: boolean;
+}
+
+const { label, value, max = 100, showValue = true } = Astro.props;
+const normalizedValue = Math.min(Math.max(value, 0), max);
+const percentage = max > 0 ? (normalizedValue / max) * 100 : 0;
+const tone = getUsageTone(percentage);
+---
+
+<div class="progress">
+  <div class="progress-meta">
+    <span>{label}</span>
+    {showValue && <strong>{formatPercent(percentage)}</strong>}
+  </div>
+  <div
+    class="track"
+    role="progressbar"
+    aria-label={label}
+    aria-valuemin="0"
+    aria-valuemax={max}
+    aria-valuenow={normalizedValue}
+  >
+    <span class="fill" data-tone={tone} style={`--progress: ${percentage}%`}></span>
+  </div>
+</div>
+
+<style>
+  .progress {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--sans);
+    font-size: 0.68rem;
+  }
+
+  .progress-meta span {
+    color: var(--muted);
+  }
+
+  .progress-meta strong {
+    font-weight: 500;
+  }
+
+  .track {
+    height: 0.35rem;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .fill {
+    display: block;
+    width: var(--progress);
+    height: 100%;
+    background: var(--tone);
+  }
+</style>

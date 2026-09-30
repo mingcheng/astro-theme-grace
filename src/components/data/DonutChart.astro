@@ -1,0 +1,128 @@
+---
+interface Segment {
+  label: string;
+  value: number;
+  color: string;
+}
+
+interface Props {
+  title: string;
+  value: string;
+  segments: Segment[];
+}
+
+const { title, value, segments } = Astro.props;
+const total = segments.reduce((sum, segment) => sum + segment.value, 0);
+let offset = 0;
+const chartSegments = segments.map((segment) => {
+  const length = total > 0 ? (segment.value / total) * 100 : 0;
+  const result = { ...segment, length, offset };
+  offset += length;
+  return result;
+});
+---
+
+<figure class="donut">
+  <div class="chart">
+    <svg viewBox="0 0 42 42" role="img" aria-label={`${title}：${value}`}>
+      <circle class="track" cx="21" cy="21" r="15.9155"></circle>
+      {chartSegments.map((segment) => (
+        <circle
+          class="segment"
+          cx="21"
+          cy="21"
+          r="15.9155"
+          style={`stroke: ${segment.color}`}
+          stroke-dasharray={`${segment.length} ${100 - segment.length}`}
+          stroke-dashoffset={-segment.offset}
+        ></circle>
+      ))}
+    </svg>
+    <div class="center"><strong>{value}</strong><span>{title}</span></div>
+  </div>
+  <figcaption>
+    {segments.map((segment) => (
+      <span><i style={`--legend: ${segment.color}`}></i>{segment.label}<strong>{segment.value}%</strong></span>
+    ))}
+  </figcaption>
+</figure>
+
+<style>
+  .donut {
+    display: grid;
+    grid-template-columns: minmax(9rem, 13rem) 1fr;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    align-items: center;
+    margin: 0;
+  }
+
+  .chart {
+    position: relative;
+  }
+
+  svg {
+    width: 100%;
+    transform: rotate(-90deg);
+  }
+
+  circle {
+    fill: none;
+    stroke-width: 3.2;
+  }
+
+  .track { stroke: var(--line); }
+
+  .segment {
+    transition: stroke-dasharray 300ms ease;
+  }
+
+  .center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    text-align: center;
+  }
+
+  .center strong {
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .center span,
+  figcaption {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.65rem;
+  }
+
+  figcaption {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  figcaption span {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  figcaption i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--legend);
+  }
+
+  figcaption strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  @media (max-width: 420px) {
+    .donut { grid-template-columns: 1fr; }
+    .chart { width: 11rem; margin-inline: auto; }
+  }
+</style>

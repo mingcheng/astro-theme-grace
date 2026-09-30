@@ -1,0 +1,70 @@
+---
+interface Props {
+  code: string;
+  language?: string;
+  filename?: string;
+}
+
+const { code, language = 'text', filename } = Astro.props;
+const lines = code.trim().split('\n');
+---
+
+<figure class="code-block">
+  <figcaption>
+    <span>{filename ?? '代码示例'}</span>
+    <span>{language}</span>
+  </figcaption>
+  <pre aria-label={`${language} 代码`}><code>{lines.map((line, index) => (
+    <span class="line"><span class="number" aria-hidden="true">{index + 1}</span><span>{line || ' '}</span></span>
+  ))}</code></pre>
+</figure>
+
+<style>
+  .code-block {
+    margin: 0;
+    color: var(--paper);
+    border: 1px solid var(--ink-line);
+    background: var(--ink);
+  }
+
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    color: var(--ink-muted);
+    border-bottom: 1px solid var(--ink-line);
+    font-family: var(--sans);
+    font-size: 0.64rem;
+  }
+
+  pre {
+    padding: 1.1rem 0;
+    margin: 0;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.75;
+    tab-size: 2;
+  }
+
+  code {
+    display: grid;
+    min-width: max-content;
+  }
+
+  .line {
+    display: grid;
+    grid-template-columns: 2.8rem 1fr;
+    padding-right: 1rem;
+  }
+
+  .line:hover {
+    background: var(--ink-line);
+  }
+
+  .number {
+    color: var(--ink-muted);
+    text-align: center;
+    user-select: none;
+  }
+</style>

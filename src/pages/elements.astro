@@ -1,0 +1,603 @@
+---
+import Accordion from '@/components/content/Accordion.astro';
+import Card from '@/components/content/Card.astro';
+import CodeBlock from '@/components/content/CodeBlock.astro';
+import DescriptionList from '@/components/content/DescriptionList.astro';
+import NoteCard from '@/components/content/NoteCard.astro';
+import Quote from '@/components/content/Quote.astro';
+import Timeline from '@/components/content/Timeline.astro';
+import DataTable from '@/components/data/DataTable.astro';
+import DonutChart from '@/components/data/DonutChart.astro';
+import MetricCard from '@/components/data/MetricCard.astro';
+import ProgressBar from '@/components/data/ProgressBar.astro';
+import Sparkline from '@/components/data/Sparkline.astro';
+import StatusBadge from '@/components/data/StatusBadge.astro';
+import Alert from '@/components/feedback/Alert.astro';
+import Dialog from '@/components/feedback/Dialog.astro';
+import EmptyState from '@/components/feedback/EmptyState.astro';
+import Skeleton from '@/components/feedback/Skeleton.astro';
+import Choice from '@/components/forms/Choice.astro';
+import Field from '@/components/forms/Field.astro';
+import RadioGroup from '@/components/forms/RadioGroup.astro';
+import SelectField from '@/components/forms/SelectField.astro';
+import TextField from '@/components/forms/TextField.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import Pagination from '@/components/navigation/Pagination.astro';
+import Steps from '@/components/navigation/Steps.astro';
+import TableOfContents from '@/components/navigation/TableOfContents.astro';
+import Tabs from '@/components/navigation/Tabs.astro';
+import Specimen from '@/components/styleguide/Specimen.astro';
+import StyleguideSection from '@/components/styleguide/StyleguideSection.astro';
+import Avatar from '@/components/ui/Avatar.astro';
+import Dropdown from '@/components/ui/Dropdown.astro';
+import Heading from '@/components/ui/Heading.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Pill from '@/components/ui/Pill.astro';
+import Tooltip from '@/components/ui/Tooltip.astro';
+import { storageSegments, trafficTrend } from '@/data/dashboard';
+import { iconLabels, type IconName } from '@/data/icons';
+import {
+  collaborationOptions,
+  colorTokens,
+  dropdownItems,
+  exampleCode,
+  faqItems,
+  headingScale,
+  nodeTable,
+  regionOptions,
+  signupSteps,
+  styleguideSections,
+  timelineItems,
+} from '@/data/styleguide';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getNotes } from '@/lib/notes';
+
+const notes = await getNotes();
+const iconNames = Object.keys(iconLabels) as IconName[];
+---
+
+<BaseLayout title="元素规范" description="站点的字体、颜色与界面元素展示。">
+  <header class="intro container">
+    <p class="eyebrow">Design system / v1.2</p>
+    <h1 class="display">元素与<br />排版规范</h1>
+    <div class="intro-aside">
+      <p>一份为简体中文阅读优化的基础视觉语言，也是一页可供维护与回归检查的组件清单。</p>
+      <TableOfContents items={[...styleguideSections]} title="组件目录" />
+    </div>
+  </header>
+
+  <div class="catalog container">
+    <StyleguideSection id="colors">
+      <div class="colors">
+        {colorTokens.map(({ name, token, value }) => (
+          <div class="swatch">
+            <span style={`--swatch: var(${token})`}></span>
+            <strong>{name}</strong>
+            <code>{token} · {value}</code>
+          </div>
+        ))}
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="type">
+      <div class="type-samples">
+        <div>
+          <span class="annotation">展示标题 · 72–120px</span>
+          <p class="display">清醒地创造</p>
+        </div>
+        <div>
+          <span class="annotation">章节标题 · 32–58px</span>
+          <p class="section-title">好的设计从理解开始</p>
+        </div>
+        <div class="body-sample">
+          <span class="annotation">正文 · 16–18px / 1.8–2.0</span>
+          <p>中文阅读强调稳定而连贯的节奏。适当的行长、充足的行距与克制的字重，让信息可以被从容地理解，也让版面在不同尺寸的屏幕上保持呼吸感。</p>
+        </div>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="headings">
+      <div class="stack">
+        <div class="heading-scale">
+          {headingScale.map((item) => (
+            <div class="heading-scale-item">
+              <span class="annotation">{item.note}</span>
+              <Heading title={item.title} level={3} size={item.size} />
+            </div>
+          ))}
+        </div>
+        <Specimen label="眉题 + 标题 + 说明">
+          <Heading
+            level={3}
+            size="section"
+            eyebrow="最近写作 / 02"
+            title="关于创造与生活的笔记"
+            description="标题组件统一了眉题、标题与导语的间距。语义层级由 level 决定，视觉尺寸由 size 独立控制。"
+          />
+        </Specimen>
+        <div class="grid">
+          <Specimen label="居中对齐">
+            <Heading level={3} size="title" align="center" eyebrow="继续阅读" title="慢一点，也没关系" />
+          </Specimen>
+          <Specimen label="附带操作">
+            <Heading level={3} size="subtitle" eyebrow="网络 / 过去 12 小时" title="入站流量">
+              <a slot="actions" href="/dashboard">查看全部 →</a>
+            </Heading>
+          </Specimen>
+        </div>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="prose">
+      <div class="prose prose-sample">
+        <p>
+          正文中可以使用<strong>加粗强调</strong>、<em>语气强调</em>、<a href="#prose">行内链接</a>与<mark>高亮标记</mark>；
+          技术说明可使用 <code>npm run build</code> 行内代码与 <kbd>⌘</kbd> + <kbd>K</kbd> 快捷键；
+          修订内容以<del>删除线</del>表示，缩写如 <abbr title="内容分发网络">CDN</abbr> 可悬停查看全称，
+          上下标如 H<sub>2</sub>O 与 10<sup>3</sup>。
+        </p>
+        <ul>
+          <li>无序列表适合并列的要点。</li>
+          <li>列表符号使用强调色，保持克制的视觉提示。</li>
+        </ul>
+        <ol>
+          <li>有序列表用于存在先后顺序的步骤。</li>
+          <li>序号与正文保持相同的阅读节奏。</li>
+        </ol>
+        <hr />
+        <Quote cite="林知夏，《为平静而设计》">好的设计不是让人停留更久，而是让人更安心地离开。</Quote>
+        <DescriptionList
+          items={[
+            { term: '作者', detail: '林知夏' },
+            { term: '发布日期', detail: '2026 年 9 月 12 日' },
+            { term: '分类', detail: '设计 · 中文排版' },
+          ]}
+        />
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="components">
+      <div class="grid">
+        <Specimen label="标签 · default / accent / quiet">
+          <div class="row">
+            <Pill label="默认标签" />
+            <Pill label="强调标签" tone="accent" />
+            <Pill label="安静标签" tone="quiet" />
+          </div>
+        </Specimen>
+        <Specimen label="头像 · sm / md / lg">
+          <div class="row">
+            <Avatar name="林知夏" size="sm" />
+            <Avatar name="林知夏" />
+            <Avatar name="Ada Lovelace" size="lg" />
+          </div>
+        </Specimen>
+        <Specimen label="链接与按钮" wide>
+          <div class="row">
+            <a href="#components">文字链接 ↗</a>
+            <a class="button" href="#components">主要操作 →</a>
+            <button class="button quiet" type="button">次要操作</button>
+            <button class="button" type="button"><Icon name="download" size={16} />导出数据</button>
+            <button class="button quiet" type="button"><Icon name="plus" size={16} />新建</button>
+            <button class="button" type="button" disabled>不可用</button>
+          </div>
+        </Specimen>
+        <Specimen label="提示气泡 · 悬停或聚焦">
+          <div class="row">
+            <Tooltip text="复制当前页面链接">
+              <button class="button quiet" type="button">分享</button>
+            </Tooltip>
+            <Tooltip text="支持中文、英文与数字" placement="bottom">
+              <button class="icon-button" type="button" aria-label="输入说明"><Icon name="info" size={18} /></button>
+            </Tooltip>
+          </div>
+        </Specimen>
+        <Specimen label="下拉菜单">
+          <div class="row">
+            <Dropdown label="更多操作" items={dropdownItems} />
+          </div>
+        </Specimen>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="forms">
+      <div class="form-grid">
+        <TextField id="form-name" label="姓名" placeholder="请输入姓名" required />
+        <TextField id="form-email" label="电子邮箱" type="email" placeholder="name@example.com" hint="仅用于接收回复，不会公开。" />
+        <SelectField id="form-region" label="所在地区" options={regionOptions} placeholder="请选择地区" />
+        <TextField id="form-website" label="个人网站" type="url" value="example" error="请输入以 https:// 开头的完整网址。" />
+        <div class="wide">
+          <TextField id="form-message" label="留言" multiline placeholder="想聊些什么？" hint="最多 500 字。" />
+        </div>
+        <RadioGroup name="form-collaboration" legend="合作类型" value="design" options={collaborationOptions} />
+        <Field as="fieldset" label="偏好设置">
+          <div class="stack compact">
+            <Choice id="form-newsletter" label="订阅每月通讯" checked />
+            <Choice id="form-terms" label="我已阅读隐私说明" description="提交即表示同意。" />
+            <Choice id="form-reminder" type="switch" label="夜间提醒" checked />
+            <Choice id="form-sync" type="switch" label="自动同步" disabled />
+          </div>
+        </Field>
+        <TextField id="form-disabled" label="账户编号" value="LZX-2026-0912" disabled />
+        <Field label="订阅更新" for="subscribe-email">
+          <div class="input-row">
+            <input class="control" id="subscribe-email" type="email" placeholder="name@example.com" />
+            <button class="button" type="button">订阅</button>
+          </div>
+        </Field>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="feedback">
+      <div class="stack">
+        <Alert title="新功能">文章归档现已支持分页浏览。</Alert>
+        <Alert tone="healthy" title="保存成功">你的偏好设置已更新。</Alert>
+        <Alert tone="warning">磁盘空间即将不足，建议清理旧日志。</Alert>
+        <Alert tone="critical" title="同步失败">
+          无法连接到 backup-hongkong-01，请稍后重试。
+          <button slot="actions" class="button quiet" type="button">重试</button>
+        </Alert>
+        <div class="grid">
+          <EmptyState title="暂无文章" description="这个分类下还没有内容，换个分类看看，或者稍后再来。">
+            <a slot="actions" class="button quiet" href="/notes">浏览全部文章</a>
+          </EmptyState>
+          <Specimen label="加载占位">
+            <Skeleton avatar lines={3} />
+            <Skeleton lines={2} />
+          </Specimen>
+        </div>
+        <Specimen label="对话框 · 原生 popover，可按 Esc 或点击遮罩关闭">
+          <div class="row">
+            <Dialog id="demo-dialog" title="删除这篇草稿？" triggerLabel="打开对话框">
+              删除后将无法恢复，已发布的文章不会受到影响。
+              <button slot="actions" class="button quiet" type="button" popovertarget="demo-dialog" popovertargetaction="hide">取消</button>
+              <button slot="actions" class="button" type="button" popovertarget="demo-dialog" popovertargetaction="hide">确认删除</button>
+            </Dialog>
+          </div>
+        </Specimen>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="navigation">
+      <div class="stack">
+        <Specimen label="面包屑">
+          <Breadcrumb items={[{ label: '首页', href: '/' }, { label: '文章', href: '/notes' }, { label: '为平静而设计' }]} />
+        </Specimen>
+        <Specimen label="分栏标签">
+          <Tabs
+            current="#navigation"
+            label="分栏示例"
+            items={[
+              { label: '概览', href: '#navigation' },
+              { label: '文章', href: '#cards', count: notes.length },
+              { label: '数据', href: '#data-display' },
+              { label: '设置', href: '#forms' },
+            ]}
+          />
+        </Specimen>
+        <Specimen label="步骤条">
+          <Steps current={1} steps={signupSteps} />
+        </Specimen>
+        <Specimen label="分页 · 中间页">
+          <Pagination currentPage={4} totalPages={8} basePath="/elements" label="分页组件示例" />
+        </Specimen>
+        <Specimen label="分页 · 首页，上一页禁用">
+          <Pagination currentPage={1} totalPages={3} basePath="/elements" label="分页首页示例" />
+        </Specimen>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="cards">
+      <div class="stack">
+        <div>
+          {notes.slice(0, 2).map((note, index) => <NoteCard note={note} index={index} />)}
+        </div>
+        <div class="grid">
+          <Card eyebrow="项目 / 2026" title="宣纸设计系统" description="一套为中文阅读优化的静态网站模板。" href="#cards">
+            <Fragment slot="footer"><Pill label="Astro" /><Pill label="零 JS" tone="quiet" /></Fragment>
+          </Card>
+          <Card eyebrow="服务" title="产品设计咨询" description="从信息架构到界面细节，陪伴团队完成一次完整迭代。">
+            <Fragment slot="footer"><Icon name="clock" size={14} />每周二、四开放预约</Fragment>
+          </Card>
+        </div>
+        <Specimen label="折叠面板 · 同组互斥展开">
+          <Accordion items={faqItems} name="faq" open={0} />
+        </Specimen>
+        <Specimen label="时间线">
+          <Timeline items={timelineItems} />
+        </Specimen>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="data-display">
+      <div class="stack">
+        <div class="grid">
+          <MetricCard label="本月请求" value="2.46M" change="+12.4%" helper="较上月" tone="healthy" />
+          <MetricCard label="错误率" value="0.08%" change="-0.02%" helper="过去 24 小时" tone="healthy" />
+        </div>
+        <div class="grid charts">
+          <Specimen>
+            <Sparkline values={trafficTrend} label="网络吞吐量" unit=" MB/s" />
+          </Specimen>
+          <Specimen>
+            <DonutChart title="已使用" value="68%" segments={storageSegments} />
+          </Specimen>
+        </div>
+        <Specimen>
+          <div class="row">
+            <StatusBadge tone="healthy" label="运行正常" pulse />
+            <StatusBadge tone="warning" label="需要关注" />
+            <StatusBadge tone="critical" label="服务异常" />
+          </div>
+          <ProgressBar label="CPU 使用率" value={46} />
+          <ProgressBar label="内存使用率" value={76} />
+          <ProgressBar label="磁盘使用率" value={93} />
+        </Specimen>
+        <DataTable caption="节点状态示例" columns={nodeTable.columns} rows={nodeTable.rows} />
+        <a class="dashboard-link" href="/dashboard">查看完整仪表盘示例 <span>→</span></a>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="content-tools">
+      <div class="content-samples">
+        <TableOfContents
+          title="文章目录"
+          items={[
+            { id: 'content-tools', label: '部署说明' },
+            { id: 'code-example', label: '代码示例', level: 3 },
+            { id: 'cards', label: '相关内容' },
+          ]}
+        />
+        <div id="code-example">
+          <CodeBlock code={exampleCode} language="TypeScript" filename="src/monitor.ts" />
+        </div>
+      </div>
+    </StyleguideSection>
+
+    <StyleguideSection id="icons">
+      <div class="stack">
+        <p class="icon-note">图标继承文字颜色和字号，可作为纯装饰元素，也可通过 <code>label</code> 提供无障碍名称。</p>
+        <div class="icon-grid">
+          {iconNames.map((name) => (
+            <div class="icon-item">
+              <Icon name={name} size={24} />
+              <span>{iconLabels[name]}</span>
+              <code>{name}</code>
+            </div>
+          ))}
+        </div>
+      </div>
+    </StyleguideSection>
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: end;
+    padding: clamp(5rem, 10vw, 9rem) 0;
+  }
+
+  .intro .eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .intro .display {
+    font-size: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  .intro-aside > p {
+    margin: 0 0 1.5rem;
+    color: var(--muted);
+  }
+
+  .catalog {
+    padding-bottom: 8rem;
+  }
+
+  code {
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.68rem;
+  }
+
+  /* 通用布局：纵向堆叠、两列网格与横向排列 */
+  .stack {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .stack.compact {
+    gap: 0.75rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  /* 颜色 */
+  .colors {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .swatch > span {
+    display: block;
+    aspect-ratio: 1;
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--line);
+    background: var(--swatch);
+  }
+
+  .swatch strong,
+  .swatch code {
+    display: block;
+  }
+
+  .swatch strong {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  /* 排版与标题 */
+  .type-samples {
+    display: grid;
+    gap: 4rem;
+  }
+
+  .type-samples p {
+    margin: 0.7rem 0 0;
+  }
+
+  .body-sample {
+    max-width: 42rem;
+  }
+
+  .body-sample p {
+    line-height: 2;
+  }
+
+  .heading-scale {
+    display: grid;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .heading-scale-item {
+    display: grid;
+    gap: 0.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .prose-sample {
+    max-width: 44rem;
+  }
+
+  .prose-sample :global(.quote) {
+    margin: 2.5rem 0;
+  }
+
+  /* 基础元素与表单 */
+  .icon-button {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .icon-button:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.8rem 1.5rem;
+    align-items: start;
+  }
+
+  .form-grid .wide {
+    grid-column: 1 / -1;
+  }
+
+  .input-row {
+    display: flex;
+  }
+
+  .input-row .control {
+    flex: 1;
+  }
+
+  /* 数据展示与内容工具 */
+  .charts > :global(*) {
+    min-height: 260px;
+  }
+
+  .dashboard-link {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--ink);
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+
+  .content-samples {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.5fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  /* 图标 */
+  .icon-note {
+    max-width: 40rem;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .icon-item {
+    display: grid;
+    gap: 0.4rem;
+    place-items: center;
+    min-height: 7.5rem;
+    padding: 1rem 0.5rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .icon-item span {
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 760px) {
+    .intro,
+    .grid,
+    .form-grid,
+    .content-samples {
+      grid-template-columns: 1fr;
+    }
+
+    .colors {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .icon-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .icon-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

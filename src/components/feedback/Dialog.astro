@@ -1,0 +1,91 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  id: string;
+  title: string;
+  triggerLabel: string;
+  triggerTone?: 'default' | 'quiet';
+}
+
+const { id, title, triggerLabel, triggerTone = 'default' } = Astro.props;
+const titleId = `${id}-title`;
+const hasActions = Astro.slots.has('actions');
+---
+
+<button class:list={['button', { quiet: triggerTone === 'quiet' }]} type="button" popovertarget={id}>
+  {triggerLabel}
+</button>
+
+<div id={id} class="dialog" popover role="dialog" aria-labelledby={titleId}>
+  <header>
+    <h2 id={titleId}>{title}</h2>
+    <button class="close" type="button" popovertarget={id} popovertargetaction="hide" aria-label="关闭">
+      <Icon name="close" size={18} />
+    </button>
+  </header>
+  <div class="dialog-body"><slot /></div>
+  {hasActions && <footer><slot name="actions" /></footer>}
+</div>
+
+<style>
+  .dialog {
+    width: min(32rem, calc(100% - 2rem));
+    padding: 0;
+    margin: auto;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    background: var(--paper);
+  }
+
+  .dialog::backdrop {
+    background: color-mix(in srgb, var(--ink) 45%, transparent);
+  }
+
+  header,
+  footer {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+  }
+
+  header {
+    border-bottom: 1px solid var(--line);
+  }
+
+  footer {
+    justify-content: flex-end;
+    border-top: 1px solid var(--line);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .close {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    color: var(--muted);
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color: var(--ink);
+    border-color: var(--line);
+  }
+
+  .dialog-body {
+    padding: 1.25rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+</style>

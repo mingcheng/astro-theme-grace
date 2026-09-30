@@ -1,0 +1,100 @@
+---
+import Pill from '@/components/ui/Pill.astro';
+import { formatChineseDate, padNumber, toISODate } from '@/lib/format';
+import { getNoteUrl, type Note } from '@/lib/notes';
+
+interface Props {
+  note: Note;
+  /** 列表中的位置（从 0 开始），传入时显示序号。 */
+  index?: number;
+}
+
+const { note, index } = Astro.props;
+const { title, excerpt, category, publishedAt, readingMinutes } = note.data;
+const url = getNoteUrl(note);
+---
+
+<article class="card">
+  {index !== undefined && <span class="index">{padNumber(index + 1)}</span>}
+  <div class="body">
+    <div class="meta">
+      <Pill label={category} />
+      <time datetime={toISODate(publishedAt)}>{formatChineseDate(publishedAt)}</time>
+      <span>{readingMinutes} 分钟阅读</span>
+    </div>
+    <h2><a href={url}>{title}</a></h2>
+    <p>{excerpt}</p>
+  </div>
+  <a class="arrow" href={url} aria-label={`阅读《${title}》`}>↗</a>
+</article>
+
+<style>
+  .card {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr auto;
+    gap: clamp(1rem, 3vw, 2.4rem);
+    align-items: start;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .index,
+  .meta,
+  .arrow {
+    font-family: var(--sans);
+  }
+
+  .index {
+    padding-top: 0.3rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    align-items: center;
+    color: var(--muted);
+    font-size: 0.7rem;
+  }
+
+  h2 {
+    margin: 1rem 0 0.7rem;
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.35;
+  }
+
+  h2 a {
+    text-decoration: none;
+  }
+
+  p {
+    max-width: 44rem;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .arrow {
+    font-size: 1.3rem;
+    text-decoration: none;
+    transition: transform 180ms ease;
+  }
+
+  .card:hover .arrow {
+    transform: translate(0.2rem, -0.2rem);
+  }
+
+  @media (max-width: 560px) {
+    .card {
+      grid-template-columns: 1fr auto;
+    }
+
+    .index {
+      display: none;
+    }
+  }
+</style>

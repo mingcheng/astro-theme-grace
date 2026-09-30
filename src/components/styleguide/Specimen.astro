@@ -1,0 +1,39 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  /** 示例说明，显示在示例框左上角。 */
+  label?: string;
+  /** 在两列网格中横跨整行。 */
+  wide?: boolean;
+}
+
+const { label, wide = false, class: className, ...attrs } = Astro.props;
+---
+
+<div class:list={['specimen', className, { wide }]} {...attrs}>
+  {label && <span class="annotation">{label}</span>}
+  <slot />
+</div>
+
+<style>
+  .specimen {
+    display: grid;
+    gap: 1.3rem;
+    align-content: start;
+    min-width: 0;
+    min-height: 160px;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+  }
+
+  .wide {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 520px) {
+    .wide {
+      grid-column: auto;
+    }
+  }
+</style>

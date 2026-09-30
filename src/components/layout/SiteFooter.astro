@@ -1,0 +1,63 @@
+---
+import { footerLinks, SITE } from '@/data/site';
+---
+
+<footer>
+  <div class="container footer-grid">
+    <div>
+      <p class="footer-title">保持好奇，保持诚实。</p>
+      <p class="muted">{SITE.description}</p>
+    </div>
+    <div class="links">
+      {footerLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+    </div>
+    <p class="copyright">© {new Date().getFullYear()} {SITE.name}</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    padding: 5rem 0 2.2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+  }
+
+  .footer-title {
+    margin: 0;
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .links {
+    display: grid;
+    align-content: start;
+    gap: 0.55rem;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+  }
+
+  .copyright {
+    grid-column: 1 / -1;
+    padding-top: 2rem;
+    margin: 0;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+    font-family: var(--sans);
+    font-size: 0.72rem;
+  }
+
+  @media (max-width: 640px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

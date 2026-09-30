@@ -1,0 +1,53 @@
+---
+interface Props {
+  text: string;
+  placement?: 'top' | 'bottom';
+}
+
+const { text, placement = 'top' } = Astro.props;
+---
+
+<span class:list={['tooltip', placement]}>
+  <slot />
+  <span class="tip" role="tooltip">{text}</span>
+</span>
+
+<style>
+  .tooltip {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .tip {
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    width: max-content;
+    max-width: 16rem;
+    padding: 0.4rem 0.6rem;
+    color: var(--paper);
+    background: var(--ink);
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    line-height: 1.5;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 0.25rem);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .top .tip {
+    bottom: calc(100% + 0.5rem);
+  }
+
+  .bottom .tip {
+    top: calc(100% + 0.5rem);
+    transform: translate(-50%, -0.25rem);
+  }
+
+  .tooltip:hover .tip,
+  .tooltip:focus-within .tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+</style>

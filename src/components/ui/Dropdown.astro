@@ -1,0 +1,94 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import type { IconName } from '@/data/icons';
+
+interface Item {
+  label: string;
+  href: string;
+  icon?: IconName;
+}
+
+interface Props {
+  label: string;
+  items: Item[];
+  align?: 'start' | 'end';
+}
+
+const { label, items, align = 'start' } = Astro.props;
+---
+
+<details class:list={['dropdown', align]}>
+  <summary class="button quiet">
+    {label}
+    <Icon name="chevronDown" size={14} />
+  </summary>
+  <ul>
+    {items.map((item) => (
+      <li>
+        <a href={item.href}>
+          {item.icon && <Icon name={item.icon} size={15} />}
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  summary {
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary :global(.icon) {
+    transition: transform 160ms ease;
+  }
+
+  .dropdown[open] summary :global(.icon) {
+    transform: rotate(180deg);
+  }
+
+  ul {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 0.35rem);
+    min-width: 12rem;
+    padding: 0.35rem 0;
+    margin: 0;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    list-style: none;
+  }
+
+  .start ul { left: 0; }
+  .end ul { right: 0; }
+
+  a {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.55rem 0.9rem;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--accent-dark);
+    background: var(--paper-deep);
+  }
+
+  a :global(.icon) {
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+interface Props {
+  lines?: number;
+  avatar?: boolean;
+  label?: string;
+}
+
+const { lines = 3, avatar = false, label = '正在加载' } = Astro.props;
+const widths = Array.from({ length: lines }, (_, index) => (index === lines - 1 ? 60 : 100 - (index % 2) * 8));
+---
+
+<div class:list={['skeleton', { 'has-avatar': avatar }]} role="status" aria-busy="true">
+  <span class="visually-hidden">{label}</span>
+  {avatar && <span class="block avatar" aria-hidden="true"></span>}
+  <div class="lines" aria-hidden="true">
+    {widths.map((width) => <span class="block line" style={`--width: ${width}%`}></span>)}
+  </div>
+</div>
+
+<style>
+  .skeleton {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .skeleton.has-avatar {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .lines {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .block {
+    display: block;
+    background: linear-gradient(90deg, var(--paper-deep) 25%, var(--line) 50%, var(--paper-deep) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  .avatar {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .line {
+    width: var(--width);
+    height: 0.7rem;
+  }
+
+  @keyframes shimmer {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+  }
+</style>

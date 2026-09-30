@@ -1,0 +1,68 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+
+interface Item {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Item[];
+  label?: string;
+}
+
+const { items, label = '面包屑导航' } = Astro.props;
+const lastIndex = items.length - 1;
+---
+
+<nav class="breadcrumb" aria-label={label}>
+  <ol>
+    {items.map((item, index) => (
+      <li>
+        {index < lastIndex && item.href ? (
+          <a href={item.href}>{item.label}</a>
+        ) : (
+          <span aria-current={index === lastIndex ? 'page' : undefined}>{item.label}</span>
+        )}
+        {index < lastIndex && <Icon name="chevronRight" size={12} />}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+  }
+
+  li {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    color: var(--muted);
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  [aria-current='page'] {
+    color: var(--ink);
+  }
+
+  li :global(.icon) {
+    color: var(--line-strong);
+  }
+</style>

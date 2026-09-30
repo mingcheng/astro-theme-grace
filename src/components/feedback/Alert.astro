@@ -1,0 +1,71 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import type { StatusTone } from '@/lib/status';
+import type { IconName } from '@/data/icons';
+
+interface Props {
+  tone?: StatusTone;
+  title?: string;
+}
+
+const { tone = 'neutral', title } = Astro.props;
+const icons: Record<StatusTone, IconName> = {
+  neutral: 'info',
+  healthy: 'check',
+  warning: 'alert',
+  critical: 'alert',
+};
+const role = tone === 'warning' || tone === 'critical' ? 'alert' : 'status';
+const hasActions = Astro.slots.has('actions');
+---
+
+<div class="alert" data-tone={tone} role={role}>
+  <Icon name={icons[tone]} size={18} />
+  <div class="alert-body">
+    {title && <strong>{title}</strong>}
+    <div><slot /></div>
+  </div>
+  {hasActions && <div class="alert-actions"><slot name="actions" /></div>}
+</div>
+
+<style>
+  .alert {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 1rem 1.1rem;
+    color: var(--ink);
+    border: 1px solid color-mix(in srgb, var(--tone) 28%, var(--paper));
+    border-left: 2px solid var(--tone);
+    background: color-mix(in srgb, var(--tone) 6%, var(--paper));
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+
+  .alert > :global(.icon) {
+    margin-top: 0.1rem;
+    color: var(--tone);
+  }
+
+  .alert-body {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  .alert-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 520px) {
+    .alert { grid-template-columns: auto minmax(0, 1fr); }
+    .alert-actions { grid-column: 2; }
+  }
+</style>

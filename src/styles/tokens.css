@@ -1,0 +1,45 @@
+/* 设计变量：全站唯一的颜色、字体与尺寸来源。组件与页面只引用变量，不写字面量颜色。 */
+:root {
+  color-scheme: light;
+
+  /* 基础色：宣纸 / 素绢 / 墨色 / 淡墨 / 界线 / 描线 */
+  --paper: #faf9f6;
+  --paper-deep: #f2efea;
+  --ink: #1a1817;
+  --muted: #6b6561;
+  --line: #dcd6cf;
+  --line-strong: #b8afa6;
+  --surface: rgb(255 255 255 / 60%);
+
+  /* 强调色：绛红 / 深绛 / 浅绛（用于墨色背景） / 绛红底色 */
+  --accent: #880000;
+  --accent-dark: #5e0b0b;
+  --accent-light: #e07268;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--paper));
+
+  /* 墨色背景上的辅助色 */
+  --ink-muted: #a39c96;
+  --ink-line: #3a3533;
+
+  /* 状态色，与 src/lib/status.ts 的 StatusTone 对应 */
+  --healthy: #3e7754;
+  --warning: #a06b18;
+  --critical: var(--accent);
+
+  /* 图表序列色 */
+  --chart-1: var(--accent);
+  --chart-2: #b8625b;
+  --chart-3: #c4a57c;
+  --chart-4: var(--line);
+
+  --serif: 'Songti SC', STSong, SimSun, serif;
+  --sans: Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --max-width: 1180px;
+}
+
+/* 语义状态：在元素上设置 data-tone="healthy | warning | critical | neutral"，组件内通过 var(--tone) 取色 */
+[data-tone] { --tone: var(--muted); }
+[data-tone='healthy'] { --tone: var(--healthy); }
+[data-tone='warning'] { --tone: var(--warning); }
+[data-tone='critical'] { --tone: var(--critical); }

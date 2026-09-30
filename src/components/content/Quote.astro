@@ -1,0 +1,14 @@
+---
+// 样式定义在 styles/prose.css，与 Markdown 正文中的 > 引用保持一致。
+interface Props {
+  cite?: string;
+  source?: string;
+}
+
+const { cite, source } = Astro.props;
+---
+
+<figure class="quote">
+  <blockquote cite={source}><slot /></blockquote>
+  {cite && <figcaption>— {cite}</figcaption>}
+</figure>

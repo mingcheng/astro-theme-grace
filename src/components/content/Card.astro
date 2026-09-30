@@ -1,0 +1,83 @@
+---
+interface Props {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+  href?: string;
+}
+
+const { title, eyebrow, description, href } = Astro.props;
+const hasFooter = Astro.slots.has('footer');
+---
+
+<article class:list={['card', { linked: href }]}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h3>
+    {href ? <a href={href}>{title}<span aria-hidden="true">↗</span></a> : title}
+  </h3>
+  {description && <p class="description">{description}</p>}
+  <slot />
+  {hasFooter && <footer><slot name="footer" /></footer>}
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    transition: border-color 160ms ease;
+  }
+
+  .card.linked:hover {
+    border-color: var(--ink);
+  }
+
+  .eyebrow {
+    margin: 0;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  h3 a {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    text-decoration: none;
+  }
+
+  h3 a::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+  }
+
+  .description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    padding-top: 0.9rem;
+    margin-top: 0.4rem;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+  }
+</style>

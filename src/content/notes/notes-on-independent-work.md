@@ -3,7 +3,6 @@ title: 独立工作三年后
 excerpt: 自由并非没有结构，而是亲自决定什么值得被放进有限的时间里。
 category: 思考
 publishedAt: 2026-06-03
-readingMinutes: 7
 ---
 
 ## 建立自己的边界

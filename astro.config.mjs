@@ -12,13 +12,6 @@ export default defineConfig({
   base: siteUrl.pathname,
   integrations: [sitemap()],
   prefetch: true,
-  vite: {
-    // Deno 只能解析 deno.json 中声明的裸模块名，而预渲染产物会直接 import Astro 的间接依赖（devalue、cookie 等），
-    // 因此把它们打包进预渲染产物；sharp 含原生模块，保持外部引用。
-    environments: {
-      prerender: { resolve: { noExternal: true, external: ['sharp'] } },
-    },
-  },
   markdown: {
     // 支持 $...$ 行内公式与 $$...$$ 块级公式，渲染为 KaTeX。
     processor: unified({

@@ -4,19 +4,23 @@
 
 ## Commands
 
-The project uses Deno 2.9.6 or newer 2.x (`mise.toml` can install Deno locally; CI pins 2.9.6). `deno.json` defines npm-compatible dependencies and tasks; `deno.lock` pins versions, and Deno manages `node_modules` automatically. No Node.js or pnpm installation is needed.
+The project uses Node.js / pnpm. `mise.toml` pins both tools for local development and CI; run `mise install` to install them. `package.json` defines dependencies and scripts, and `pnpm-lock.yaml` locks dependency versions. Use `mise exec --` before commands if mise is not activated in the shell.
 
 ```bash
-deno install         # install dependencies and update deno.lock
-deno task dev        # astro dev
-deno task build      # runs `astro check` (type-check) BEFORE `astro build`; type errors fail the build
-deno task check      # astro check only (TS + .astro type-check; there is no separate linter)
-deno task test       # vitest run (only src/**/*.test.ts)
+pnpm install --frozen-lockfile # install locked dependencies, as in CI
+pnpm dev            # astro dev
+pnpm build          # runs `astro check` (type-check) BEFORE `astro build`; type errors fail the build
+pnpm check          # astro check only (TS + .astro type-check; there is no separate linter)
+pnpm test           # vitest run (only src/**/*.test.ts)
 
 # Single test file / single test by name
-deno task test src/lib/pagination.test.ts
-deno task test src/lib/pagination.test.ts -t "ellipses"
+pnpm test src/lib/pagination.test.ts
+pnpm test src/lib/pagination.test.ts -t "ellipses"
 ```
+
+Use `pnpm add` / `pnpm remove` to manage dependencies. After manually changing dependencies in `package.json`, run `pnpm install` and commit both the manifest and lockfile.
+
+The repository is a GitHub Template and supports `pnpm create astro@latest --template mingcheng/astro-theme-grace`. Keep this entry point working. The project license is Apache-2.0; never commit `.env` credentials.
 
 ## Architecture
 
@@ -42,8 +46,8 @@ Everything is imported through the `@/` alias (`@/*` → `src/*`, see `tsconfig.
   - `/dashboard` renders dashboard data; `/elements` is a living style guide that showcases every reusable component — update it (and `data/styleguide.ts`) when adding or changing a component.
 - **Layout**: every page wraps in `layouts/BaseLayout.astro` (optional `title`, `description`), which imports `styles/global.css` and emits title, description, canonical, Open Graph, sitemap and theme-color tags. Omit `title` on the home page to show just the site name.
 - **Components (`src/components/<group>/`)**: `layout/` (SiteHeader, SiteFooter), `ui/` (Icon, Pill, Heading, Avatar, Tooltip, Dropdown), `forms/`, `feedback/`, `navigation/`, `content/` (incl. `Figure` — image with optional caption, `ratio` crop and `layout` = `full | narrow | start | end`), `data/` (dashboard widgets incl. `Panel`), `styleguide/` (`StyleguideSection`, `Specimen` — only for `/elements`).
-- `astro.config.mjs`: `@astrojs/sitemap` integration, `prefetch: true`, `vite.environments.prerender.resolve.noExternal: true` (Deno can't resolve Astro's transitive bare imports such as `devalue` / `cookie` from `dist/.prerender`, so they're bundled; `sharp` stays external) — without it `deno task build` fails, `site` and `base` from the full `SITE_URL` env var (fallback `https://mingcheng.github.io/astro-theme-grace/`); `markdown.processor` is `unified()` from `@astrojs/markdown-remark` (Astro 7's default "Sätteri" processor doesn't run `remarkPlugins`/`rehypePlugins`) with `remark-math` + `rehype-katex`, so `$...$` / `$$...$$` in note bodies render as KaTeX; `BaseLayout` imports `katex/dist/katex.min.css` before `global.css` so `.prose`'s own rules (in `prose.css`) can override KaTeX's defaults. `markdown.shikiConfig` uses the built-in `css-variables` theme (colors come from the `--astro-code-*` tokens in `tokens.css`) and `codeFrameTransformer`.
-- `.github/workflows/deploy.yml`: GitHub Pages deployment (setup-deno → `deno ci` → `deno task test` → `deno task build`); PRs build only. Uses Pages' full `base_url` (including project path) unless `SITE_URL` is set.
+- `astro.config.mjs`: `@astrojs/sitemap` integration, `prefetch: true`, `site` and `base` from the full `SITE_URL` env var (fallback `https://mingcheng.github.io/astro-theme-grace/`); `markdown.processor` is `unified()` from `@astrojs/markdown-remark` (Astro 7's default "Sätteri" processor doesn't run `remarkPlugins`/`rehypePlugins`) with `remark-math` + `rehype-katex`, so `$...$` / `$$...$$` in note bodies render as KaTeX; `BaseLayout` imports `katex/dist/katex.min.css` before `global.css` so `.prose`'s own rules (in `prose.css`) can override KaTeX's defaults. `markdown.shikiConfig` uses the built-in `css-variables` theme (colors come from the `--astro-code-*` tokens in `tokens.css`) and `codeFrameTransformer`.
+- `.github/workflows/deploy.yml`: GitHub Pages deployment (mise → `pnpm install --frozen-lockfile` → `pnpm test` → `pnpm build`); PRs build only. Uses Pages' full `base_url` (including project path) unless `SITE_URL` is set.
 
 ## Conventions
 

@@ -3,7 +3,6 @@ title: 屏幕上的中文排版
 excerpt: 从行长、标点悬挂到中西文混排，一份面向中文阅读体验的实践笔记。
 category: 设计
 publishedAt: 2026-08-26
-readingMinutes: 8
 ---
 
 ## 先确定阅读节奏

@@ -3,7 +3,6 @@ title: 为平静而设计
 excerpt: 当所有产品都在争夺注意力，我们是否还能设计一种更安静、更诚实的数字体验？
 category: 设计
 publishedAt: 2026-09-12
-readingMinutes: 6
 featured: true
 ---
 

@@ -3,7 +3,6 @@ title: 一种很小的晨间仪式
 excerpt: 在消息抵达之前，留半小时给纸、笔和一杯不那么烫的茶。
 category: 生活
 publishedAt: 2026-07-18
-readingMinutes: 4
 ---
 
 ## 比清单更早

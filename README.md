@@ -67,6 +67,8 @@ pnpm install
 
 将 [package.json](./package.json) 与 [pnpm-lock.yaml](./pnpm-lock.yaml) 一并提交。CI 使用 `pnpm install --frozen-lockfile` 校验锁文件。
 
+TypeScript 暂时限定为最新的 6.x：当前 `astro check` 不支持 TypeScript 7.0。升级主版本前，请确认 Astro 类型检查兼容性，保留构建前的检查步骤。
+
 ## 质量检查
 
 ```bash
